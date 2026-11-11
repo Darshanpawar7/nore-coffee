@@ -13,7 +13,11 @@ const OUT = process.env.SHOTS_DIR ?? 'docs/screenshots';
 const problems = [];
 
 async function session(browser, viewport, scale) {
-  const context = await browser.newContext({ viewport, deviceScaleFactor: scale, reducedMotion: 'reduce' });
+  const context = await browser.newContext({
+    viewport,
+    deviceScaleFactor: scale,
+    reducedMotion: 'reduce',
+  });
   const page = await context.newPage();
   page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
   page.on('console', (message) => {
