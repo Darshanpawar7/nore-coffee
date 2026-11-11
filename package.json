@@ -18,7 +18,7 @@
     "dev": "astro dev --port 4104",
     "build": "astro build",
     "preview": "astro preview --port 4204",
-    "typecheck": "astro check",
+    "typecheck": "astro check && tsc --project tsconfig.browser.json && tsc --project tsconfig.node.json",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "test": "vitest run --coverage",

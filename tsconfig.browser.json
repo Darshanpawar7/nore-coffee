@@ -1,0 +1,12 @@
+{
+  // Astro's own type definitions bring Node's globals into the main program, so `process`,
+  // `Buffer` and Node's timer handles type-check everywhere under src. This second program
+  // re-checks the code that ships to the browser with no Node types at all: a stray Node API
+  // in an island, a store or the pure logic fails `npm run typecheck`.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": []
+  },
+  "include": ["src/lib", "src/brand", "src/stores", "src/components/islands"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}

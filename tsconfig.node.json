@@ -1,0 +1,16 @@
+{
+  // Tooling that runs in Node and never ships: configuration, scripts, repository-level tests
+  // and the Playwright specs. Only this program asks for Node's types by name.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": [
+    "*.config.ts",
+    "eslint.config.js",
+    "config/**/*",
+    "scripts/**/*",
+    "tests/**/*",
+    "e2e/**/*"
+  ]
+}
