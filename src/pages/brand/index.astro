@@ -1,0 +1,531 @@
+---
+import { KANNADA } from '../../brand/kannada';
+import { ACCENT_COLOURS, CORE } from '../../brand/palette';
+import Kolam from '../../components/brand/Kolam.astro';
+import Logo from '../../components/brand/Logo.astro';
+import Mark from '../../components/brand/Mark.astro';
+import Pouch from '../../components/brand/Pouch.astro';
+import BrassFilter from '../../components/illustrations/BrassFilter.astro';
+import KolamGenerator from '../../components/islands/KolamGenerator';
+import { getProducts } from '../../data/catalog';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { bestInk, contrast } from '../../lib/contrast';
+import { PULL } from '../../brand/marks';
+
+const products = await getProducts();
+const froth = '#f4eadb';
+const decoction = '#1f1410';
+const ratio = (value: number) => `${value.toFixed(1)}:1`;
+const showcase = products.filter((product) =>
+  ['meter-kaapi', 'nilgiri-mist', 'araku-dawn'].includes(product.id),
+);
+---
+
+<BaseLayout
+  title="Brand guidelines"
+  description="The Nore identity: the froth-ring mark, a palette taken from South Indian hills, Anek and Newsreader, a generative kolam system, packaging and voice."
+>
+  <div class="wrap brand">
+    <header class="brand__head">
+      <p class="eyebrow">Brand guidelines</p>
+      <h1 class="page-title">South Indian modernism</h1>
+      <p class="serif brand__lede">
+        Brass and stainless steel, mosaic floors, a rice-flour kolam on the doorstep at dawn, a
+        screen-printed matchbox label. Not nostalgia, and not imported minimalism: a coffee brand
+        that could only come from Bengaluru.
+      </p>
+    </header>
+
+    <section class="brand__section" aria-labelledby="logo-title">
+      <h2 id="logo-title" class="brand__title">
+        Logo
+      </h2>
+      <p class="serif brand__text">
+        The froth ring is a steel tumbler seen from above: the rim, the coffee, and the crown of
+        bubbles that a good pull leaves at the edge. Beside it, “Nore” set tight in Anek at its
+        narrowest, and its Kannada spelling after a brass rule.
+      </p>
+      <div class="logo-board">
+        <div class="logo-board__tile logo-board__tile--froth">
+          <Logo size="large" />
+        </div>
+        <div class="logo-board__tile logo-board__tile--dark">
+          <Logo size="large" mono />
+        </div>
+        <div class="logo-board__tile logo-board__tile--froth">
+          <div class="clearspace">
+            <Mark size={120} />
+          </div>
+          <p class="logo-board__note">Clear space: the width of the rim on every side, at least.</p>
+        </div>
+        <div class="logo-board__tile logo-board__tile--milk">
+          <svg viewBox="0 0 64 64" class="pull-mark" aria-hidden="true">
+            <path d={PULL.tumbler} fill="#c9ccd1" stroke="#1f1410" stroke-width="1.2"></path>
+            <path
+              d={PULL.stream}
+              fill="none"
+              stroke="#7a4a2c"
+              stroke-width="2.4"
+              stroke-linecap="round"
+            ></path>
+            <path d={PULL.davara} fill="#c9ccd1" stroke="#1f1410" stroke-width="1.2"></path>
+          </svg>
+          <p class="logo-board__note">
+            The pull, explored and kept as a secondary mark for motion and packaging.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="brand__section" aria-labelledby="colour-title">
+      <h2 id="colour-title" class="brand__title">
+        Colour
+      </h2>
+      <p class="serif brand__text">
+        A dark the colour of decoction, a page the colour of froth, brass for the small marks, and
+        earth red for the one thing to press. Brass is never text: it is only 2.8 to 1 on the page.
+      </p>
+      <ul class="swatches">
+        {CORE.map((colour) => (
+          <li class="swatch-card">
+            <svg class="swatch-card__chip" viewBox="0 0 10 10" aria-hidden="true">
+              <rect width="10" height="10" fill={colour.hex} />
+            </svg>
+            <p class="swatch-card__name">{colour.name}</p>
+            <p class="swatch-card__hex">{colour.hex.toUpperCase()}</p>
+            <p class="swatch-card__role">{colour.role}</p>
+            <p class="swatch-card__contrast">
+              {ratio(contrast(colour.hex, froth))} on froth ·{' '}
+              {ratio(contrast(colour.hex, decoction))} on decoction
+            </p>
+          </li>
+        ))}
+      </ul>
+      <h3 class="brand__subtitle">Eight accents, one for each coffee</h3>
+      <p class="serif brand__text">
+        Each coffee takes a colour from where it grows. The ink on each label is chosen for
+        contrast, so turmeric takes the dark and the rest take milk.
+      </p>
+      <ul class="swatches swatches--accents">
+        {Object.entries(ACCENT_COLOURS).map(([accent, colour]) => {
+          const ink = bestInk(colour.hex, '#fbf6ee', decoction);
+          return (
+            <li class={`swatch-card accent-${accent}`}>
+              <div class="swatch-card__accent">
+                <span>Aa</span>
+              </div>
+              <p class="swatch-card__name">{colour.name}</p>
+              <p class="swatch-card__hex">{colour.hex.toUpperCase()}</p>
+              <p class="swatch-card__role">{colour.from}</p>
+              <p class="swatch-card__contrast">
+                {ink === decoction ? 'Dark' : 'Milk'} ink, {ratio(contrast(colour.hex, ink))}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+
+    <section class="brand__section" aria-labelledby="type-title">
+      <h2 id="type-title" class="brand__title">
+        Type
+      </h2>
+      <div class="type-board">
+        <div class="type-sample">
+          <p class="type-sample__display">Pulled, not poured.</p>
+          <p class="type-sample__note">Anek Latin, weight 800, width 75%: headlines, set tight.</p>
+        </div>
+        <div class="type-sample">
+          <p class="type-sample__ui">Add to cart · 250 g · South Indian filter</p>
+          <p class="type-sample__note">Anek Latin, weight 400 to 650, width 100%: the interface.</p>
+        </div>
+        <div class="type-sample">
+          <p class="type-sample__serif">
+            A metre of air between the tumbler and the davara cools the coffee and whips up the
+            froth.
+          </p>
+          <p class="type-sample__note">Newsreader: stories, descriptions and the case study.</p>
+        </div>
+        <div class="type-sample">
+          <p class="type-sample__kannada kannada" lang="kn">
+            {KANNADA.nore.text} · {KANNADA.kaapi.text} · {KANNADA.bengaluru.text}
+          </p>
+          <p class="type-sample__note">
+            Anek Kannada, from the same family, so the two scripts sit together. Three words only:{' '}
+            {KANNADA.nore.meaning}, {KANNADA.kaapi.meaning.toLowerCase()},{' '}
+            {KANNADA.bengaluru.meaning}.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="brand__section" aria-labelledby="kolam-title">
+      <h2 id="kolam-title" class="brand__title">
+        The kolam system
+      </h2>
+      <p class="serif brand__text">
+        Every morning, doorsteps across South India get a kolam: a looping line drawn in rice flour
+        around a grid of dots, at the same hour as the first coffee. Every Nore coffee has its own,
+        generated from its name.
+      </p>
+      <ol class="kolam-steps serif">
+        <li>The name picks a grid of dots: a 5 × 5 square or one of two diamonds.</li>
+        <li>
+          Between each pair of neighbouring dots there is a gate, open or closed, chosen from the
+          name and mirrored across both axes.
+        </li>
+        <li>
+          A closed gate gets a quarter circle around the dot. An open one gets two straight lines
+          that cross at 45°.
+        </li>
+        <li>
+          Every point where a line meets a dot’s circle joins exactly two strokes, so the line
+          always closes into smooth loops that weave around every dot and never touch one.
+        </li>
+      </ol>
+      <ul class="kolam-grid">
+        {products.map((product) => (
+          <li class={`accent-${product.accent}`}>
+            <Kolam seed={product.name} />
+            <span>{product.name}</span>
+          </li>
+        ))}
+      </ul>
+      <h3 class="brand__subtitle">Try it</h3>
+      <KolamGenerator client:visible />
+    </section>
+
+    <section class="brand__section" aria-labelledby="packaging-title">
+      <h2 id="packaging-title" class="brand__title">
+        Packaging
+      </h2>
+      <p class="serif brand__text">
+        A flat-bottom kraft pouch with a one-way valve, and a label panel in the coffee’s accent
+        carrying its kolam, name, origin, roast and weight. The bag is the same for every coffee;
+        the colour and the kolam do the talking.
+      </p>
+      <div class="pouch-row">
+        {showcase.map((product) => (
+          <Pouch product={product} transition={false} />
+        ))}
+      </div>
+    </section>
+
+    <section class="brand__section" aria-labelledby="illustration-title">
+      <h2 id="illustration-title" class="brand__title">
+        Illustration
+      </h2>
+      <div class="illustration-board">
+        <BrassFilter />
+        <p class="serif brand__text">
+          Flat and geometric, in a handful of colours, with a faint paper grain so it feels
+          screen-printed. The things that make the coffee, drawn plainly: the brass filter, the
+          tumbler and davara, the hills. Everything on the site is drawn in code; there is not one
+          photograph.
+        </p>
+      </div>
+    </section>
+
+    <section class="brand__section" aria-labelledby="voice-title">
+      <h2 id="voice-title" class="brand__title">
+        Voice
+      </h2>
+      <p class="serif brand__text">
+        Warm, dry, specific, a little funny. Never twee, never breathless.
+      </p>
+      <div class="voice">
+        <div class="voice__col voice__col--do">
+          <h3>Say</h3>
+          <ul>
+            <li>“Pulled, not poured.”</li>
+            <li>“Chicory is not a crime.”</li>
+            <li>“By-two it with someone.”</li>
+            <li>“Brew it black. Milk would drown it.”</li>
+          </ul>
+        </div>
+        <div class="voice__col voice__col--dont">
+          <h3>Do not say</h3>
+          <ul>
+            <li>“Experience the authentic taste of South India!”</li>
+            <li>“Artisanal, handcrafted, premium.”</li>
+            <li>“Your new obsession.”</li>
+            <li>“Namaste, coffee lover!”</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .brand {
+    padding-bottom: var(--space-7);
+  }
+
+  .brand__head {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 48rem;
+  }
+
+  .brand__lede {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .brand__section {
+    display: grid;
+    gap: var(--space-5);
+    margin-top: var(--space-8);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--line);
+  }
+
+  .brand__title {
+    font-size: var(--step-3);
+    font-weight: 780;
+    font-stretch: 78%;
+  }
+
+  .brand__subtitle {
+    margin-top: var(--space-4);
+    font-size: var(--step-2);
+  }
+
+  .brand__text {
+    max-width: 44rem;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .logo-board {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .logo-board__tile {
+    display: grid;
+    place-items: center;
+    gap: var(--space-3);
+    min-height: 220px;
+    padding: var(--space-6);
+    border-radius: var(--radius-m);
+  }
+
+  .logo-board__tile--froth {
+    background: var(--froth);
+    border: 1px solid var(--line);
+  }
+
+  .logo-board__tile--dark {
+    --ink: var(--froth);
+    --ink-soft: #d9ccb6;
+    --paper: var(--decoction);
+    background: var(--decoction);
+    color: var(--froth);
+  }
+
+  .logo-board__tile--milk {
+    background: var(--milk);
+    border: 1px solid var(--line);
+  }
+
+  .logo-board__note {
+    max-width: 22rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    text-align: center;
+  }
+
+  .clearspace {
+    padding: 28px;
+    outline: 1px dashed var(--brass);
+    outline-offset: -1px;
+  }
+
+  .pull-mark {
+    width: 120px;
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .swatch-card {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .swatch-card__chip,
+  .swatch-card__accent {
+    width: 100%;
+    height: 96px;
+    margin-bottom: var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+  }
+
+  .swatch-card__accent {
+    display: grid;
+    place-items: end start;
+    padding: var(--space-3);
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: var(--step-2);
+    font-weight: 800;
+    font-stretch: 75%;
+  }
+
+  .swatch-card__name {
+    font-weight: 700;
+  }
+
+  .swatch-card__hex,
+  .swatch-card__contrast {
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .swatch-card__role,
+  .swatch-card__contrast {
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  .type-board {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .type-sample {
+    display: grid;
+    gap: var(--space-3);
+    align-content: space-between;
+    padding: var(--space-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--raised);
+  }
+
+  .type-sample__display {
+    font-size: var(--step-4);
+    font-weight: 800;
+    font-stretch: 75%;
+    line-height: 0.95;
+  }
+
+  .type-sample__ui {
+    font-size: var(--step-2);
+    font-weight: 560;
+  }
+
+  .type-sample__serif {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    line-height: 1.3;
+  }
+
+  .type-sample__kannada {
+    font-size: var(--step-3);
+    font-weight: 650;
+    color: var(--earth);
+  }
+
+  .type-sample__note {
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  .kolam-steps {
+    display: grid;
+    gap: var(--space-2);
+    max-width: 46rem;
+    margin: 0;
+    padding-left: 1.4em;
+    font-size: var(--step-1);
+  }
+
+  .kolam-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .kolam-grid li {
+    display: grid;
+    gap: var(--space-2);
+    justify-items: center;
+    color: var(--accent);
+    font-size: var(--step--1);
+    font-weight: 650;
+  }
+
+  .kolam-grid span {
+    color: var(--ink);
+  }
+
+  .pouch-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+    max-width: 900px;
+  }
+
+  .illustration-board {
+    display: grid;
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .voice {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .voice__col {
+    padding: var(--space-5);
+    border-radius: var(--radius-m);
+    background: var(--raised);
+    border-top: 4px solid #2e5e4a;
+  }
+
+  .voice__col--dont {
+    border-top-color: var(--earth);
+  }
+
+  .voice__col h3 {
+    margin-bottom: var(--space-3);
+    font-size: var(--step-1);
+  }
+
+  .voice__col ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding-left: 1.2em;
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+  }
+
+  @media (max-width: 760px) {
+    .logo-board,
+    .type-board,
+    .pouch-row,
+    .illustration-board,
+    .voice {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

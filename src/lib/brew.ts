@@ -43,10 +43,34 @@ export function filterRecipe(cups: number, strength: Strength): FilterRecipe {
 
 /** Ratio cards for other ways to brew: coffee to water by weight. */
 export const RATIOS = [
-  { method: 'Moka pot', ratio: 8, grind: 'Fine', time: 'About 5 minutes on a low flame' },
-  { method: 'Pour-over', ratio: 16, grind: 'Medium-fine', time: 'About 3 minutes' },
-  { method: 'French press', ratio: 15, grind: 'Coarse', time: '4 minutes, then press' },
-  { method: 'Cold brew concentrate', ratio: 8, grind: 'Coarse', time: '16 hours in the fridge' },
+  {
+    id: 'moka-pot',
+    method: 'Moka pot',
+    ratio: 8,
+    grind: 'Fine',
+    time: 'About 5 minutes on a low flame',
+  },
+  {
+    id: 'pour-over',
+    method: 'Pour-over',
+    ratio: 16,
+    grind: 'Medium-fine',
+    time: 'About 3 minutes',
+  },
+  {
+    id: 'french-press',
+    method: 'French press',
+    ratio: 15,
+    grind: 'Coarse',
+    time: '4 minutes, then press',
+  },
+  {
+    id: 'cold-brew',
+    method: 'Cold brew concentrate',
+    ratio: 8,
+    grind: 'Coarse',
+    time: '16 hours in the fridge',
+  },
 ] as const;
 
 /** Grams of coffee for a given amount of water at a ratio, rounded to the gram. */

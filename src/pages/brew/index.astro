@@ -1,0 +1,116 @@
+---
+import BrewGuide from '../../components/islands/BrewGuide';
+import BrassFilter from '../../components/illustrations/BrassFilter.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { coffeeFor, RATIOS } from '../../lib/brew';
+---
+
+<BaseLayout
+  title="Brew guide"
+  description="How to make South Indian filter coffee: powder, water, decoction and milk worked out for your cups, with a drip timer. Plus ratios for moka pot, pour-over, French press and cold brew."
+>
+  <div class="wrap guide">
+    <header class="guide__head">
+      <div>
+        <p class="eyebrow">Brew guide</p>
+        <h1 class="page-title">South Indian filter coffee</h1>
+        <p class="serif guide__lede">
+          The brass filter is two chambers and a little patience. Coffee in the top, hot water over
+          it, and a strong decoction drips into the bottom. Then milk, sugar if you like, and the
+          pull.
+        </p>
+      </div>
+      <BrassFilter />
+    </header>
+    <BrewGuide client:visible />
+
+    <section class="ratios" aria-labelledby="ratios-title">
+      <h2 id="ratios-title" class="guide__title">
+        Other ways to brew
+      </h2>
+      <p class="serif">
+        Coffee to water by weight. For one mug of 250 ml, the coffee is worked out for you.
+      </p>
+      <ul class="ratios__grid">
+        {RATIOS.map((card) => (
+          <li class="ratio">
+            <h3>{card.method}</h3>
+            <p class="ratio__number">1:{card.ratio}</p>
+            <p>
+              {coffeeFor(250, card.ratio)} g of coffee to 250 ml of water. {card.grind} grind.{' '}
+              {card.time}.
+            </p>
+          </li>
+        ))}
+      </ul>
+      <p class="field__hint">A starting point, not a rule: adjust to taste.</p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .guide {
+    padding-bottom: var(--space-7);
+  }
+
+  .guide__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: center;
+    margin-bottom: var(--space-6);
+  }
+
+  .guide__lede {
+    max-width: 36rem;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .guide__title {
+    font-size: var(--step-3);
+    font-weight: 780;
+    font-stretch: 78%;
+  }
+
+  .ratios {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .ratios__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ratio {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-5);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--brass);
+    border-radius: var(--radius-s);
+    background: var(--raised);
+  }
+
+  .ratio h3 {
+    font-size: var(--step-1);
+  }
+
+  .ratio__number {
+    font-size: var(--step-3);
+    font-weight: 800;
+    font-stretch: 75%;
+  }
+
+  @media (max-width: 760px) {
+    .guide__head {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

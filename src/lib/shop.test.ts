@@ -18,7 +18,7 @@ import { href } from './paths';
 import { checkPin } from './pin';
 import { pricePerCup, variantOf, variantsFor } from './pricing';
 import { PRODUCTS, productById } from './products';
-import { quote, SUBSCRIBER_PERCENT } from './subscription';
+import { describeDraft, GRIND_FOR, parseDraft, quote, SUBSCRIBER_PERCENT } from './subscription';
 import { checkCoupon, shippingFor, shippingProgress, totalsFor } from './totals';
 
 const product = (id: string) => {
@@ -278,6 +278,48 @@ describe('subscriptions', () => {
     expect(quote(product('nilgiri-mist'), '1kg', 9, 'monthly').perDelivery).toBe(
       quote(product('nilgiri-mist'), '1kg', 4, 'monthly').perDelivery,
     );
+  });
+});
+
+describe('subscription drafts', () => {
+  const draft = {
+    coffee: 'baba-budan',
+    size: '500g',
+    bags: 2,
+    cadence: 'monthly',
+    method: 'pour-over',
+  };
+
+  it('reads back a good draft and describes it', () => {
+    const parsed = parseDraft(draft, PRODUCTS);
+    expect(parsed).toEqual(draft);
+    const described = parsed && describeDraft(parsed, PRODUCTS);
+    expect(described?.name).toBe('Subscription: Baba Budan');
+    expect(described?.detail).toBe('2 × 500 g, every four weeks, ground for pour-over');
+    expect(described && formatInr(described.quote.perDelivery)).toBe('₹1,915.20');
+    expect(
+      describeDraft({ ...draft, coffee: 'rotation', size: '250g' } as never, PRODUCTS).name,
+    ).toContain('rotation');
+    expect(GRIND_FOR['cold-brew']).toBe('french-press');
+    expect(
+      describeDraft({ ...draft, method: 'south-indian-filter' } as never, PRODUCTS).detail,
+    ).toContain('ground for South Indian filter');
+  });
+
+  it('refuses anything else', () => {
+    for (const broken of [
+      null,
+      'draft',
+      { ...draft, coffee: 'decoction-no-1' },
+      { ...draft, coffee: 'nope' },
+      { ...draft, size: '2kg' },
+      { ...draft, bags: 0 },
+      { ...draft, bags: 2.5 },
+      { ...draft, cadence: 'daily' },
+      { ...draft, method: 'percolator' },
+    ]) {
+      expect(parseDraft(broken, PRODUCTS)).toBeNull();
+    }
   });
 });
 

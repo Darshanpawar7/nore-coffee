@@ -1,0 +1,31 @@
+---
+import SubscribeBuilder from '../../components/islands/SubscribeBuilder';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Subscribe"
+  description="A Nore subscription in three steps: tell us how you brew, pick a coffee or the roaster's rotation, and choose how much and how often. Ten per cent off and free shipping."
+>
+  <div class="wrap">
+    <p class="eyebrow">Subscribe</p>
+    <h1 class="page-title">By-two it with someone.</h1>
+    <p class="serif subscribe__lede">
+      Coffee every two or four weeks, ground for the way you brew. Ten per cent off every bag, and
+      the shipping is on us.
+    </p>
+    <SubscribeBuilder client:load />
+    <noscript>
+      <p class="serif">The subscription builder needs JavaScript. The shop works without it.</p>
+    </noscript>
+  </div>
+</BaseLayout>
+
+<style>
+  .subscribe__lede {
+    max-width: 40rem;
+    margin-bottom: var(--space-6);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+</style>

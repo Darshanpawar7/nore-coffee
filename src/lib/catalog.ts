@@ -126,6 +126,13 @@ export const METHOD_LABEL: Readonly<Record<Method, string>> = {
   'cold-brew': 'Cold brew',
 };
 
+/** A label inside a sentence: "pour-over", but "South Indian filter" and "French press" keep their capitals. */
+export function inSentence(label: string): string {
+  return /^(South Indian|French)/.test(label)
+    ? label
+    : label.charAt(0).toLowerCase() + label.slice(1);
+}
+
 /** Roasts in order from lightest to darkest, for sorting. */
 export function roastRank(roast: Roast): number {
   return ROASTS.indexOf(roast);

@@ -1,0 +1,45 @@
+---
+import Mark from '../components/brand/Mark.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { href } from '../lib/paths';
+---
+
+<BaseLayout title="Not found" description="This page does not exist." noindex>
+  <div class="wrap empty-cup">
+    <Mark size={120} />
+    <h1 class="page-title">This cup is empty.</h1>
+    <p class="serif">
+      The page you were after is not here. Perhaps it was pulled a little too high.
+    </p>
+    <div class="empty-cup__links">
+      <a class="button" href={href('/shop/')}>
+        Find some coffee
+      </a>
+      <a class="button button--ghost" href={href('/')}>
+        Go home
+      </a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .empty-cup {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: center;
+    padding: var(--space-8) 0;
+    text-align: center;
+  }
+
+  .empty-cup p {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .empty-cup__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+  }
+</style>

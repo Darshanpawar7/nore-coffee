@@ -1,0 +1,11 @@
+---
+import OrderConfirmation from '../../../components/islands/OrderConfirmation';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Order placed" description="Your demo order with Nore." noindex>
+  <div class="wrap narrow">
+    <h1 class="page-title">The davara is on its way. Almost.</h1>
+    <OrderConfirmation client:load />
+  </div>
+</BaseLayout>

@@ -1,0 +1,16 @@
+---
+import CheckoutForm from '../../components/islands/CheckoutForm';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Checkout"
+  description="Check out of the Nore concept shop. Nothing is charged and no order is placed."
+  noindex
+>
+  <div class="wrap">
+    <h1 class="page-title">Checkout</h1>
+    <p class="page-note">Nore is a concept: no payment is taken and no order is placed.</p>
+    <CheckoutForm client:load />
+  </div>
+</BaseLayout>
