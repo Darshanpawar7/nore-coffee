@@ -24,7 +24,9 @@
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "e2e": "playwright test",
-    "wasm-fallback": "node scripts/wasm-fallback.ts"
+    "wasm-fallback": "node scripts/wasm-fallback.ts",
+    "screenshots": "node scripts/screenshots.mjs",
+    "fonts": "python scripts/subset-fonts.py"
   },
   "dependencies": {
     "@astrojs/preact": "^6.1.4",
