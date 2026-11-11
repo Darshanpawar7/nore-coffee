@@ -23,7 +23,8 @@
     "format": "prettier --write .",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "wasm-fallback": "node scripts/wasm-fallback.ts"
   },
   "dependencies": {
     "@astrojs/preact": "^6.1.4",
