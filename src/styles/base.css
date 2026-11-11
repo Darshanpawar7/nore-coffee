@@ -81,6 +81,20 @@ p {
   border: 0;
 }
 
+/* Notes for visitors without JavaScript, and placeholders only JavaScript replaces. The class on
+   <html> is set by the first script in the head, so neither ever flashes. */
+.no-js-only {
+  display: none;
+}
+
+html:not(.js) .no-js-only {
+  display: block;
+}
+
+html:not(.js) .js-only {
+  display: none;
+}
+
 .skip {
   position: absolute;
   top: var(--space-3);

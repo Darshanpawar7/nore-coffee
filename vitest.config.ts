@@ -19,7 +19,9 @@ export default defineConfig({
     include: ['src/**/*.test.ts', 'tests/**/*.test.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/**/*.{ts,tsx}'],
+      // The pure logic and the brand data are unit-tested here. The Preact islands and the stores are
+      // exercised end to end against the real build (e2e/), which is where a UI bug would show.
+      include: ['src/lib/**/*.ts', 'src/brand/**/*.ts'],
       exclude: [
         'src/**/*.test.{ts,tsx}',
         // Astro's content collection definition: it imports the virtual module astro:content,

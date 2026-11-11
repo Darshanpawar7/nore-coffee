@@ -1,0 +1,369 @@
+---
+import Kolam from '../../components/brand/Kolam.astro';
+import Pouch from '../../components/brand/Pouch.astro';
+import { getProducts } from '../../data/catalog';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { href } from '../../lib/paths';
+
+const products = await getProducts();
+const hero = products.find((product) => product.id === 'meter-kaapi');
+
+/** Measured on the production build with Lighthouse 12.8 in headless Chrome. */
+const LIGHTHOUSE = [
+  { page: 'Home', device: 'Phone (simulated)', scores: [98, 100, 100, 100] },
+  { page: 'Home', device: 'Desktop', scores: [100, 100, 100, 100] },
+  { page: 'Product page', device: 'Phone (simulated)', scores: [97, 100, 100, 100] },
+  { page: 'Product page', device: 'Desktop', scores: [100, 100, 100, 100] },
+];
+---
+
+<BaseLayout
+  title="Case study"
+  description="How Nore was designed and built: the brief, the name, a generative kolam identity, and a storefront that sells South Indian filter coffee to the people who brew it."
+>
+  <article class="wrap study">
+    <header class="study__head">
+      <div>
+        <p class="eyebrow">Case study</p>
+        <h1 class="page-title">A coffee brand that could only come from Bengaluru</h1>
+        <p class="serif study__lede">
+          Nore is a concept: the identity and the online shop of a filter-coffee roaster, designed
+          and built end to end. Nothing is for sale. This page explains the decisions, and what each
+          one was for.
+        </p>
+      </div>
+      {hero && <Pouch product={hero} transition={false} class="study__pouch" />}
+    </header>
+
+    <section aria-labelledby="brief-title">
+      <h2 id="brief-title">The brief</h2>
+      <p>
+        A small roaster wants to sell South Indian coffee online to the people who drink it at home.
+        The shop has to feel like it belongs to Bengaluru, sell without friction, and load fast on a
+        mid-range phone on a patchy connection, which is how most of its customers will meet it.
+      </p>
+    </section>
+
+    <section aria-labelledby="audience-title">
+      <h2 id="audience-title">Two kinds of buyer</h2>
+      <p>
+        <strong>The household</strong> has bought filter coffee powder, with chicory, from the same
+        shop for twenty years. It wants the right blend and the right grind, quickly, and to know
+        when it will arrive.
+        <strong>The newcomer</strong> is curious about single origins, may have learnt pour-over
+        somewhere else, and wants to be guided: what does Araku taste like, and how much coffee goes
+        into a moka pot? Most of the decisions below serve one of the two without getting in the
+        other’s way.
+      </p>
+    </section>
+
+    <section aria-labelledby="name-title">
+      <h2 id="name-title">The name</h2>
+      <p>
+        <em>Nore</em> is Kannada for froth: the foam on a filter coffee after it has been pulled
+        through the air between tumbler and davara. The name is short, easy to say in Kannada and in
+        English, and points at the ritual that makes this coffee different from every other: the
+        pull. The brand uses exactly three Kannada words, and a test in the repository fails if any
+        other appears, because a concept should not put words in a language’s mouth.
+      </p>
+    </section>
+
+    <section aria-labelledby="identity-title">
+      <h2 id="identity-title">The identity</h2>
+      <p>
+        The direction was <a href={href('/brand/')}>South Indian modernism</a>: brass and steel,
+        mosaic floors, a kolam at dawn, a screen-printed matchbox label. It steers clear of
+        nostalgia kitsch on one side and of imported, white-label minimalism on the other.
+      </p>
+      <ul class="study__points">
+        <li>
+          <strong>Colour.</strong> Decoction for the dark, froth for the page, brass for the small
+          marks, earth red for the one thing to press. Each coffee owns one more colour, taken from
+          where it grows: monsoon green for Chikkamagaluru, Nilgiri blue, the pepper of the Malabar
+          coast.
+        </li>
+        <li>
+          <strong>Type.</strong> Anek has a width axis, so one family does both jobs: condensed and
+          heavy for headlines that feel painted on a shop sign, normal width for the interface. Anek
+          Kannada is its sibling, so the two scripts sit together. Newsreader carries the stories.
+        </li>
+        <li>
+          <strong>The mark.</strong> A steel tumbler seen from above, with a crown of froth. A
+          second mark, the pull itself as a single line, was kept for motion.
+        </li>
+      </ul>
+      <div class="study__kolams" aria-hidden="true">
+        {products.slice(0, 4).map((product) => (
+          <div class={`accent-${product.accent}`}>
+            <Kolam seed={product.name} />
+          </div>
+        ))}
+      </div>
+      <p>
+        <strong>The kolam system is the heart of it.</strong> A kolam is drawn around a grid of
+        dots, at the same hour as the first coffee. Every Nore coffee gets one, generated from its
+        name by a small, tested function: the name picks the grid and opens or closes the gates
+        between dots, symmetrically, and the line is traced into closed loops. A new coffee gets its
+        pattern for free, and it is always recognisably part of the family.
+      </p>
+    </section>
+
+    <section aria-labelledby="shop-title">
+      <h2 id="shop-title">The shop</h2>
+      <ul class="study__points">
+        <li>
+          <strong>Grind defaults to South Indian filter.</strong> It is what most buyers brew.
+          Defaulting to whole bean would quietly send many of them coffee their filter cannot use.
+        </li>
+        <li>
+          <strong>Price per cup.</strong> Every bag says about how much a cup costs, at 10 g a cup.
+          ₹560 for a bag sounds like a lot until it reads as ₹22 a cup.
+        </li>
+        <li>
+          <strong>Subscriptions are a builder, not a pricing table.</strong> People know how they
+          brew; they do not know which plan they need. So the first question is how you brew, and
+          the coffees narrow to suit it.
+        </li>
+        <li>
+          <strong>A cart that never moves the page.</strong> Adding to the cart ticks the count and
+          says what went in. The drawer edits quantities, offers undo after a remove, shows how far
+          free shipping is, and answers the question every Indian shopper asks first: when will it
+          arrive? Type a PIN code.
+        </li>
+        <li>
+          <strong>Coupons that explain themselves.</strong> BYTWO, ten per cent off two or more
+          bags, named after the Bengaluru habit of splitting one coffee between two people. Try it
+          with one bag and it says why not.
+        </li>
+        <li>
+          <strong>A checkout that helps.</strong> One page, autofill on every field, messages that
+          say what to do, and an error summary that takes focus and links to each field.
+        </li>
+        <li>
+          <strong>Honest about being a concept.</strong> The note is in every footer, on the product
+          page, the checkout and the confirmation. There are no card fields, no fake reviews, no
+          press logos, no customer counts, and no product data for search engines to mistake for a
+          real offer.
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="a11y-title">
+      <h2 id="a11y-title">Accessibility</h2>
+      <p>
+        The whole purchase, from the shop to the confirmation, works from the keyboard alone, and an
+        automated test walks it. axe finds nothing serious on any page. Brass is never used for
+        text, at 2.8 to 1 on the page, and the ink on each coffee’s colour is picked by contrast in
+        code. The cart is a modal dialog, so focus stays inside it. Every animation, from the kolam
+        drawing itself to the pull and the page transitions, stops under reduced motion and leaves
+        the finished picture.
+      </p>
+    </section>
+
+    <section aria-labelledby="perf-title">
+      <h2 id="perf-title">Speed</h2>
+      <p>
+        The pages are plain HTML from the build. JavaScript arrives only where something changes:
+        the cart, the product options, the filters, the checkout, the brew timer, the kolam
+        generator and the subscription builder. There is not one photograph: every bag, illustration
+        and pattern is SVG drawn in code.
+      </p>
+      <p>
+        The first measurement on a simulated phone was 74 for the home page. Fonts were 615 KB of a
+        660 KB page: the rupee sign alone pulled in 81 KB of extended Latin, and three Kannada words
+        pulled in 304 KB. A small script now subsets them, leaving 171 KB of fonts in a 214 KB page.
+        Inlining the stylesheets and preloading the two text fonts did the rest, along with one
+        surprise: <code>text-wrap: pretty</code> on every paragraph more than doubled style and
+        layout time on a slowed CPU, so it went.
+      </p>
+      <table class="study__table">
+        <caption>Lighthouse 12.8 on the production build</caption>
+        <thead>
+          <tr>
+            <th scope="col">Page</th>
+            <th scope="col">Device</th>
+            <th scope="col">Performance</th>
+            <th scope="col">Accessibility</th>
+            <th scope="col">Best practices</th>
+            <th scope="col">SEO</th>
+          </tr>
+        </thead>
+        <tbody>
+          {LIGHTHOUSE.map((row) => (
+            <tr>
+              <th scope="row">{row.page}</th>
+              <td>{row.device}</td>
+              {row.scores.map((score) => (
+                <td class="study__score">{score}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <ul class="study__scores">
+        {LIGHTHOUSE.map((row) => (
+          <li>
+            <strong>
+              {row.page}, {row.device.toLowerCase()}:
+            </strong>{' '}
+            performance {row.scores[0]}, accessibility {row.scores[1]}, best practices{' '}
+            {row.scores[2]}, SEO {row.scores[3]}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="build-title">
+      <h2 id="build-title">How it is built</h2>
+      <p>
+        Astro builds static pages; Preact islands share state through nanostores, and the cart lives
+        in local storage, kept in step across tabs and read back as untrusted. Prices, coupons,
+        shipping, PIN codes, the brew maths, subscriptions and the kolam generator are pure
+        TypeScript with unit tests, and money is counted in whole paise. A strict
+        Content-Security-Policy is on every page. End-to-end tests drive the real build in Chrome.
+        The code is open:{' '}
+        <a href="https://github.com/Darshanpawar7/nore-coffee">
+          github.com/Darshanpawar7/nore-coffee
+        </a>
+        .
+      </p>
+    </section>
+
+    <section aria-labelledby="next-title">
+      <h2 id="next-title">If it were real</h2>
+      <p>
+        Payments through UPI and cards with a provider such as Razorpay; real stock and roast dates;
+        accounts, so a subscription can be paused from a phone; and a Kannada edition of the site,
+        translated by a native speaker, not a machine.
+      </p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .study {
+    display: grid;
+    gap: var(--space-7);
+    padding-bottom: var(--space-7);
+  }
+
+  .study__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .study__lede {
+    max-width: 40rem;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .study__head :global(.study__pouch) {
+    max-width: 280px;
+    justify-self: center;
+  }
+
+  .study section {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 50rem;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--line);
+  }
+
+  .study h2 {
+    font-size: var(--step-3);
+    font-weight: 780;
+    font-stretch: 78%;
+  }
+
+  .study section > p,
+  .study__points {
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    line-height: 1.6;
+  }
+
+  .study__points {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding-left: 1.2em;
+  }
+
+  .study__points strong,
+  .study section > p strong {
+    font-family: var(--font-sans);
+    font-weight: 700;
+  }
+
+  .study__kolams {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 120px));
+    gap: var(--space-5);
+  }
+
+  .study__kolams div {
+    color: var(--accent);
+  }
+
+  .study__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .study__table caption {
+    padding-bottom: var(--space-2);
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    text-align: left;
+  }
+
+  .study__table th,
+  .study__table td {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .study__table thead th {
+    font-size: var(--step--1);
+  }
+
+  .study__score {
+    font-weight: 760;
+  }
+
+  .study__scores {
+    display: none;
+    gap: var(--space-2);
+    margin: 0;
+    padding-left: 1.2em;
+  }
+
+  .study code {
+    font-size: 0.9em;
+  }
+
+  @media (max-width: 760px) {
+    .study__head {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Six columns do not fit a phone: the same scores are given as a list instead. */
+    .study__table {
+      display: none;
+    }
+
+    .study__scores {
+      display: grid;
+    }
+
+    .study__kolams {
+      grid-template-columns: repeat(2, minmax(0, 120px));
+    }
+  }
+</style>

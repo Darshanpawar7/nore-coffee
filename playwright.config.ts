@@ -13,6 +13,8 @@ export default defineConfig({
   testDir: './e2e',
   outputDir: './test-results',
   fullyParallel: true,
+  workers: IS_CI ? 2 : 4,
+  expect: { timeout: 10_000 },
   forbidOnly: IS_CI,
   retries: IS_CI ? 2 : 0,
   reporter: IS_CI ? [['github'], ['html', { open: 'never' }]] : [['list']],
@@ -25,14 +27,22 @@ export default defineConfig({
     {
       name: 'desktop',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
+      testIgnore: /(mobile|no-js)\.spec\.ts/,
     },
     {
       name: 'mobile',
       use: { ...devices['Pixel 7'], viewport: { width: 390, height: 844 } },
+      testMatch: /mobile\.spec\.ts/,
+    },
+    {
+      // Reading and browsing must work with JavaScript off; only the cart and the tools need it.
+      name: 'no-js',
+      use: { ...devices['Desktop Chrome'], javaScriptEnabled: false },
+      testMatch: /no-js\.spec\.ts/,
     },
   ],
   webServer: {
-    command: 'npm run preview',
+    command: 'npm run build && npm run preview',
     url: SITE_URL,
     reuseExistingServer: !IS_CI,
     timeout: 120_000,

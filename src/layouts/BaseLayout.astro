@@ -45,6 +45,8 @@ const fullTitle =
     <link rel="preload" href={anekLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={newsreader} as="font" type="font/woff2" crossorigin />
     <script is:inline>
+      // Marks the page as having JavaScript, so the notes meant for those without it stay hidden.
+      document.documentElement.classList.add('js');
       // A page transition the browser skips (a typed address, a reload) rejects its promises. Nothing
       // needs to hear about that, so they are caught here instead of reaching the console.
       const ignore = () => undefined;

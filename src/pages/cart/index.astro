@@ -10,11 +10,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <div class="wrap narrow">
     <h1 class="page-title">Your cart</h1>
     <CartPage client:load />
-    <noscript>
-      <p class="serif">
-        Your cart is kept in this browser and needs JavaScript to open. Everything else on the site
-        works without it.
-      </p>
-    </noscript>
+    <p class="serif no-js-only">
+      Your cart is kept in this browser and needs JavaScript to open. Everything else on the site
+      works without it.
+    </p>
   </div>
 </BaseLayout>

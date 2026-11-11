@@ -88,16 +88,16 @@ Unit tests sit next to the module they cover (`money.ts`, `money.test.ts`).
 
 ### Islands and state (planned)
 
-| Island                | Page             | State it owns or reads                           |
-| --------------------- | ---------------- | ------------------------------------------------ |
-| `CartButton`          | every page       | reads `$cartCount`                               |
-| `CartDrawer`          | every page       | reads `$cart`, `$totals`; dispatches cart actions |
-| `ProductOptions`      | product          | size, grind, quantity; dispatches `add`          |
-| `ShopFilters`         | shop             | roast, process, method, sort; mirrors the URL    |
-| `SubscriptionBuilder` | subscribe        | the three steps and the live summary             |
-| `BrewGuide`           | brew guide       | cups, strength, timer                            |
-| `KolamGenerator`      | brand            | the typed word and the chosen accent             |
-| `CheckoutForm`        | checkout         | field values, validation, the error summary      |
+| Island                | Page       | State it owns or reads                            |
+| --------------------- | ---------- | ------------------------------------------------- |
+| `CartButton`          | every page | reads `$cartCount`                                |
+| `CartDrawer`          | every page | reads `$cart`, `$totals`; dispatches cart actions |
+| `ProductOptions`      | product    | size, grind, quantity; dispatches `add`           |
+| `ShopFilters`         | shop       | roast, process, method, sort; mirrors the URL     |
+| `SubscriptionBuilder` | subscribe  | the three steps and the live summary              |
+| `BrewGuide`           | brew guide | cups, strength, timer                             |
+| `KolamGenerator`      | brand      | the typed word and the chosen accent              |
+| `CheckoutForm`        | checkout   | field values, validation, the error summary       |
 
 Shared state lives in `src/stores` as nanostores:
 
@@ -215,16 +215,16 @@ the arc radius.
 
 ## Key decisions
 
-| Decision | Rejected | Why |
-| --- | --- | --- |
-| Astro static output with Preact islands | A single-page app | The site is mostly content. HTML-first pages load fast and work without JavaScript; only stateful widgets pay for a runtime. |
-| Prices resolved from the catalogue on every total | Storing prices in cart lines | Persisted carts outlive price changes. Looking prices up removes a whole class of stale-data bugs. |
-| Integer paise and integer percentages | Floating-point rupees | 10% of Rs 798 is Rs 79.80. Integers make that exact and comparable. |
-| Symmetry by canonical gate key | Generating a full grid, then mirroring | One source of truth per gate orbit; the symmetry test cannot fail by construction. |
-| One SVG path per kolam loop | One path element per stroke | Round joins everywhere and a single dash animation per loop. |
-| Outlined wordmark | Live text in a web font | A logo should not depend on font loading, and the hero should not shift. |
-| Classes for accents | Inline `style` attributes | Keeps the CSP free of `unsafe-inline` for styles. |
-| TypeScript 6 | TypeScript 7 | `typescript-eslint` 8 and `@astrojs/check` do not accept 7 yet. |
+| Decision                                          | Rejected                               | Why                                                                                                                          |
+| ------------------------------------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Astro static output with Preact islands           | A single-page app                      | The site is mostly content. HTML-first pages load fast and work without JavaScript; only stateful widgets pay for a runtime. |
+| Prices resolved from the catalogue on every total | Storing prices in cart lines           | Persisted carts outlive price changes. Looking prices up removes a whole class of stale-data bugs.                           |
+| Integer paise and integer percentages             | Floating-point rupees                  | 10% of Rs 798 is Rs 79.80. Integers make that exact and comparable.                                                          |
+| Symmetry by canonical gate key                    | Generating a full grid, then mirroring | One source of truth per gate orbit; the symmetry test cannot fail by construction.                                           |
+| One SVG path per kolam loop                       | One path element per stroke            | Round joins everywhere and a single dash animation per loop.                                                                 |
+| Outlined wordmark                                 | Live text in a web font                | A logo should not depend on font loading, and the hero should not shift.                                                     |
+| Classes for accents                               | Inline `style` attributes              | Keeps the CSP free of `unsafe-inline` for styles.                                                                            |
+| TypeScript 6                                      | TypeScript 7                           | `typescript-eslint` 8 and `@astrojs/check` do not accept 7 yet.                                                              |
 
 ## How to extend
 

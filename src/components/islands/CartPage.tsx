@@ -7,5 +7,5 @@ export default function CartPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
-  return mounted ? <CartContents /> : <p class="field__hint">Opening your cart…</p>;
+  return mounted ? <CartContents /> : <p class="field__hint js-only">Opening your cart…</p>;
 }
