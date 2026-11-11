@@ -117,4 +117,10 @@ export default defineConfig(
     files: NODE_SIDE,
     languageOptions: { globals: globals.node },
   },
+  {
+    // A command-line tool: it reports what it wrote, and its page.evaluate callbacks run in the browser.
+    files: ['scripts/screenshots.mjs'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+    rules: { 'no-console': 'off' },
+  },
 );
