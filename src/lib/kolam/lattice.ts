@@ -32,7 +32,7 @@ const DIRECTION: Readonly<Record<Side, LatticePoint>> = {
 };
 
 export function pointKey(point: LatticePoint): string {
-  return `${point.x},${point.y}`;
+  return `${String(point.x)},${String(point.y)}`;
 }
 
 export function dotCentre(dot: GridDot): LatticePoint {

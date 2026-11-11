@@ -115,11 +115,45 @@ describe('the seeded generator', () => {
     expect(hits / DRAWS).toBeLessThan(0.74);
   });
 
-  it('picks an item from a list and refuses an empty list', () => {
+  it('picks an item from a list', () => {
     const rng = createRng('choices');
     const options = ['square', 'diamond'] as const;
 
     expect(options).toContain(rng.pick(options));
-    expect(() => rng.pick([])).toThrow(RangeError);
+  });
+
+  it('reaches every item of a list over many picks', () => {
+    const rng = createRng('every item');
+    const options = ['square', 'diamond-5', 'diamond-7'] as const;
+
+    const seen = new Set(Array.from({ length: 300 }, () => rng.pick(options)));
+
+    expect([...seen].sort()).toEqual([...options].sort());
+  });
+
+  it('says that the list is empty when there is nothing to pick from', () => {
+    const rng = createRng('choices');
+
+    expect(() => rng.pick([])).toThrow(new RangeError('Cannot pick from an empty list.'));
+  });
+
+  it('picks from a list whose items are undefined, null or zero', () => {
+    const rng = createRng('falsy items');
+
+    // A list that may hold a gap: the pick is a value that happens to be undefined.
+    const gaps: readonly (string | undefined)[] = [undefined];
+    expect(rng.pick(gaps)).toBeUndefined();
+    expect(rng.pick([null])).toBeNull();
+    expect(rng.pick([0])).toBe(0);
+  });
+
+  it('spends exactly one draw on a pick, so that sequences stay reproducible', () => {
+    const picking = createRng('one draw');
+    const drawing = createRng('one draw');
+
+    picking.pick(['a', 'b', 'c']);
+    drawing.next();
+
+    expect(picking.next()).toBe(drawing.next());
   });
 });

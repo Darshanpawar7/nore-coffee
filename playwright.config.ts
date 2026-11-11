@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 const PREVIEW_PORT = 4204;
 const BASE_PATH = process.env.BASE_PATH ?? '/nore-coffee/';
-const SITE_URL = `http://localhost:${PREVIEW_PORT}${BASE_PATH}`;
+const SITE_URL = `http://localhost:${String(PREVIEW_PORT)}${BASE_PATH}`;
 const IS_CI = Boolean(process.env.CI);
 
 /**

@@ -39,6 +39,11 @@ describe('constructing money', () => {
   it('converts paise back to rupees for display maths', () => {
     expect(toRupees(paise(7980))).toBe(79.8);
   });
+
+  it('has a single zero: negative zero is stored as plain zero', () => {
+    expect(Object.is(paise(-0), 0)).toBe(true);
+    expect(Object.is(rupees(-0), 0)).toBe(true);
+  });
 });
 
 describe('arithmetic', () => {
@@ -62,6 +67,10 @@ describe('arithmetic', () => {
   it('rejects a fractional or negative quantity', () => {
     expect(() => multiply(rupees(420), 1.5)).toThrow(RangeError);
     expect(() => multiply(rupees(420), -1)).toThrow(RangeError);
+  });
+
+  it('gives plain zero for none of a negative amount, such as a refund line', () => {
+    expect(Object.is(multiply(paise(-500), 0), 0)).toBe(true);
   });
 });
 
@@ -94,6 +103,30 @@ describe('percentages', () => {
     expect(roundToRupee(paise(1680))).toBe(1700);
     expect(roundToRupee(paise(1649))).toBe(1600);
     expect(roundToRupee(paise(1650))).toBe(1700);
+  });
+
+  it('rounds a negative amount as the mirror image of the positive one', () => {
+    expect(percentOf(paise(-15), 10)).toBe(-2);
+    expect(percentOf(paise(-14), 10)).toBe(-1);
+    expect(percentOf(paise(-5), 10)).toBe(-1);
+    expect(roundToRupee(paise(-1650))).toBe(-1700);
+    expect(roundToRupee(paise(-1649))).toBe(-1600);
+  });
+
+  it('mirrors every refund against its charge, to the paisa', () => {
+    for (let amount = 0; amount <= 250; amount += 1) {
+      const charge = percentOf(paise(amount), 10);
+      const refund = percentOf(paise(-amount), 10);
+
+      expect(Object.is(refund, 0 - charge)).toBe(true);
+    }
+  });
+
+  it('gives plain zero when a negative amount rounds to nothing', () => {
+    expect(Object.is(percentOf(paise(-1), 10), 0)).toBe(true);
+    expect(Object.is(percentOf(paise(-4), 10), 0)).toBe(true);
+    expect(Object.is(roundToRupee(paise(-10)), 0)).toBe(true);
+    expect(Object.is(roundToRupee(paise(-49)), 0)).toBe(true);
   });
 });
 

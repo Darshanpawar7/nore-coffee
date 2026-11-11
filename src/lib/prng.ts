@@ -31,10 +31,16 @@ export function normaliseSeed(seed: string): string {
   return seed.normalize('NFKC').trim().replace(/\s+/g, ' ').toLowerCase();
 }
 
-/** FNV-1a over the code points, followed by the MurmurHash3 finaliser. Returns a uint32. */
+/**
+ * FNV-1a over the code points, followed by the MurmurHash3 finaliser. Returns a uint32.
+ * The text is hashed exactly as given: pass it through `normaliseSeed` first when two spellings
+ * of a name should give one pattern.
+ */
 export function hashSeed(seed: string): number {
   let hash = FNV_OFFSET_BASIS;
   for (const character of seed) {
+    // `for...of` yields whole code points, so there is always one to read. The fallback exists
+    // only because `codePointAt` is typed as possibly undefined.
     hash ^= character.codePointAt(0) ?? 0;
     hash = Math.imul(hash, FNV_PRIME);
   }
@@ -52,7 +58,10 @@ function avalanche(value: number): number {
   return mixed >>> 0;
 }
 
-/** Creates a mulberry32 generator from a string (hashed first) or a number (used as given). */
+/**
+ * Creates a mulberry32 generator from a string (hashed first) or a number (used as given).
+ * A string seed is not normalised here, so that the caller decides what counts as the same seed.
+ */
 export function createRng(seed: string | number): Rng {
   let state = typeof seed === 'number' ? seed >>> 0 : hashSeed(seed);
 
@@ -65,7 +74,7 @@ export function createRng(seed: string | number): Rng {
 
   const int = (bound: number): number => {
     if (!Number.isSafeInteger(bound) || bound <= 0) {
-      throw new RangeError(`The bound must be a positive whole number, received ${bound}.`);
+      throw new RangeError(`The bound must be a positive whole number, received ${String(bound)}.`);
     }
     return Math.floor(next() * bound);
   };
@@ -75,9 +84,9 @@ export function createRng(seed: string | number): Rng {
     int,
     chance: (probability) => next() < probability,
     pick: <T>(items: readonly T[]): T => {
-      const item = items[int(Math.max(items.length, 0))];
-      if (item === undefined) throw new RangeError('Cannot pick from an empty list.');
-      return item;
+      if (items.length === 0) throw new RangeError('Cannot pick from an empty list.');
+      // The index is always inside the list, and the item there may itself be undefined.
+      return items[int(items.length)] as T;
     },
   };
 }
