@@ -21,6 +21,21 @@ export default defineConfig({
   trailingSlash: 'always',
   output: 'static',
   integrations: [preact(), sitemap()],
+  // A strict Content-Security-Policy in a <meta> on every page. Astro adds the hashes of its own
+  // scripts and styles to script-src and style-src; nothing else may run or load from elsewhere.
+  security: {
+    csp: {
+      directives: [
+        "default-src 'self'",
+        "img-src 'self' data: blob:",
+        "font-src 'self'",
+        "connect-src 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+      ],
+    },
+  },
   server: { port: DEV_PORT },
   vite: {
     // Astro has no --strictPort flag; these make dev and preview fail instead of drifting to

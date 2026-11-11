@@ -1,4 +1,421 @@
 ---
-const title = "Nore";
+import { KANNADA } from '../brand/kannada';
+import Kolam from '../components/brand/Kolam.astro';
+import Pull from '../components/illustrations/Pull.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getProducts } from '../data/catalog';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { href } from '../lib/paths';
+
+const products = await getProducts();
 ---
-<html lang="en"><head><meta charset="utf-8" /><title>{title}</title></head><body><h1>{title}</h1></body></html>
+
+<BaseLayout
+  title="Nore"
+  description="Nore roasts South Indian filter coffee in Bengaluru: single origins from Chikkamagaluru to Araku and a house blend with chicory. A concept brand and storefront."
+>
+  <section class="hero">
+    <div class="hero__kolam" aria-hidden="true">
+      <Kolam seed="nore" arrangement="diamond-7" strokeWidth={1.6} />
+    </div>
+    <div class="wrap hero__inner">
+      <p class="eyebrow">Small-lot coffee, roasted in Bengaluru</p>
+      <h1 class="hero__word">
+        <span class="hero__latin">Nore</span>
+        <span class="hero__kannada kannada" lang="kn">
+          {KANNADA.nore.text}
+        </span>
+      </h1>
+      <p class="hero__line">Filter coffee, pulled a metre high.</p>
+      <p class="hero__lede serif">
+        Coffee from the hills of South India, roasted for the brass filter on your kitchen counter.{' '}
+        <em>Nore</em> is Kannada for froth: the foam on a filter coffee after it has been pulled
+        through the air between tumbler and davara.
+      </p>
+      <div class="hero__actions">
+        <a class="button" href={href('/shop/')}>
+          Shop the coffee
+        </a>
+        <a class="button button--ghost" href={href('/brew/')}>
+          How to make it
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pull-section" aria-labelledby="pull-title">
+    <div class="wrap pull-section__grid">
+      <div class="pull-section__copy">
+        <p class="eyebrow">The signature move</p>
+        <h2 id="pull-title" class="section-title">
+          Pulled, not poured.
+        </h2>
+        <p class="serif">
+          Decoction and hot milk go from the tumbler into the davara from as high as an arm will
+          reach, then back again, three or four times. The fall cools the coffee to drinking heat,
+          mixes it, and whips up the <em>nore</em>.
+        </p>
+        <p class="serif">
+          Every coffee in the range is roasted with that in mind: enough body to stand up to milk,
+          enough sweetness that sugar is a choice, not a rescue.
+        </p>
+        <p class="pull-section__aside">
+          Chicory is not a crime. It is in the house blend, a fifth by weight.
+        </p>
+      </div>
+      <div class="pull-section__scene">
+        <Pull />
+      </div>
+    </div>
+  </section>
+
+  <section class="range" aria-labelledby="range-title">
+    <div class="wrap">
+      <div class="range__head">
+        <h2 id="range-title" class="section-title">
+          The range
+        </h2>
+        <p class="serif">
+          Seven coffees and a bottle of ready decoction. Each has its own kolam, drawn from its
+          name, in a colour from where it grows.
+        </p>
+      </div>
+      <ul class="range__grid">
+        {products.map((product, index) => (
+          <ProductCard product={product} index={index} />
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="teaser" aria-labelledby="brew-title">
+    <div class="wrap teaser__grid">
+      <div>
+        <p class="eyebrow">Brew guide</p>
+        <h2 id="brew-title" class="section-title">
+          Ten grams, sixty millilitres, fifteen minutes.
+        </h2>
+      </div>
+      <ol class="teaser__steps serif">
+        <li>
+          Ten grams of filter grind a cup in the top chamber, pressed lightly with the umbrella
+          disc.
+        </li>
+        <li>Sixty millilitres of water just off the boil, lid on, and wait while it drips.</li>
+        <li>One part decoction to three of hot milk, sugar if you like.</li>
+        <li>Pull it three or four times between tumbler and davara for the nore.</li>
+      </ol>
+      <a class="button button--ghost teaser__link" href={href('/brew/')}>
+        Open the brew guide, with a timer
+      </a>
+    </div>
+  </section>
+
+  <section class="subscribe-pitch" aria-labelledby="subscribe-title">
+    <div class="wrap subscribe-pitch__inner">
+      <h2 id="subscribe-title" class="section-title">
+        By-two it with someone.
+      </h2>
+      <p class="serif">
+        In Bengaluru you split a coffee in two and nobody minds. Split the bill instead: a bag every
+        two or four weeks, ten per cent off every bag, and the shipping is on us.
+      </p>
+      <a class="button" href={href('/subscribe/')}>
+        Build a subscription
+      </a>
+    </div>
+  </section>
+
+  <section class="story" aria-labelledby="story-title">
+    <div class="wrap">
+      <h2 id="story-title" class="section-title">
+        From seven seeds to your davara
+      </h2>
+      <ol class="story__steps">
+        <li>
+          <span class="story__when">Around 1670</span>
+          <p class="serif">
+            The story goes that a Sufi pilgrim, Baba Budan, carried seven coffee seeds home from
+            Mocha and planted them in the hills of Chikkamagaluru. Indian coffee begins there.
+          </p>
+        </li>
+        <li>
+          <span class="story__when">The hills</span>
+          <p class="serif">
+            Today it grows under shade trees across the Western Ghats, in Kodagu, Chikkamagaluru,
+            Wayanad and the Nilgiris, and in the Eastern Ghats at Araku, among pepper vines and
+            areca palms.
+          </p>
+        </li>
+        <li>
+          <span class="story__when">The coast</span>
+          <p class="serif">
+            On the Malabar coast, green beans are left open to the monsoon winds for three months or
+            so. They swell, pale and mellow: Monsooned Malabar, a taste first made by accident in
+            the holds of sailing ships.
+          </p>
+        </li>
+        <li>
+          <span class="story__when">The city</span>
+          <p class="serif">
+            In Bengaluru, the darshinis serve it in steel tumblers, standing, at seven in the
+            morning. That is the cup Nore roasts for.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: var(--space-8) 0 var(--space-9);
+  }
+
+  .hero__kolam {
+    position: absolute;
+    top: -18%;
+    right: -14%;
+    width: min(78vw, 860px);
+    color: var(--brass);
+    opacity: 0.22;
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .hero__word {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--space-5);
+    margin-top: var(--space-2);
+    line-height: 0.82;
+  }
+
+  .hero__latin {
+    font-size: var(--step-5);
+    font-weight: 800;
+    font-stretch: 75%;
+    letter-spacing: -0.03em;
+  }
+
+  .hero__kannada {
+    font-size: calc(var(--step-5) * 0.62);
+    font-weight: 600;
+    font-stretch: 90%;
+    color: var(--earth);
+  }
+
+  .hero__line {
+    font-size: var(--step-3);
+    font-weight: 700;
+    font-stretch: 80%;
+    line-height: 1;
+  }
+
+  .hero__lede {
+    max-width: 36rem;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  .section-title {
+    font-size: var(--step-4);
+    font-weight: 780;
+    font-stretch: 76%;
+    letter-spacing: -0.015em;
+  }
+
+  /* The pull scrolls past a sticky scene: the section is tall so the animation has room to play. */
+  .pull-section {
+    view-timeline-name: --pull;
+    min-height: 210vh;
+    padding: var(--space-8) 0;
+    background: var(--raised);
+    border-block: 1px solid var(--line);
+  }
+
+  .pull-section__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  .pull-section__copy {
+    position: sticky;
+    top: 22vh;
+    display: grid;
+    gap: var(--space-4);
+    font-size: var(--step-1);
+  }
+
+  .pull-section__scene {
+    position: sticky;
+    top: 12vh;
+    display: grid;
+    justify-items: center;
+  }
+
+  .pull-section__scene :global(.pull) {
+    width: min(100%, 300px);
+    max-height: 78vh;
+  }
+
+  .pull-section__aside {
+    padding-left: var(--space-4);
+    border-left: 3px solid var(--brass);
+    font-weight: 600;
+    font-size: var(--step-0);
+  }
+
+  .range {
+    padding: var(--space-9) 0 var(--space-7);
+  }
+
+  .range__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: end;
+    margin-bottom: var(--space-6);
+  }
+
+  .range__head p {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .range__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+  }
+
+  .teaser {
+    padding: var(--space-8) 0;
+    background: var(--decoction);
+    color: var(--froth);
+    --ink: var(--froth);
+    --ink-soft: #d9ccb6;
+  }
+
+  .teaser__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: var(--space-6) var(--space-8);
+    align-items: start;
+  }
+
+  .teaser__steps {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+    padding-left: 1.4em;
+    font-size: var(--step-1);
+  }
+
+  .teaser__steps li::marker {
+    color: var(--brass);
+    font-family: var(--font-sans);
+    font-weight: 800;
+  }
+
+  .teaser__link {
+    grid-column: 2;
+    justify-self: start;
+    border-color: var(--froth);
+    color: var(--froth);
+  }
+
+  .teaser__link:hover {
+    background: var(--froth);
+    color: var(--decoction);
+  }
+
+  .subscribe-pitch {
+    padding: var(--space-9) 0;
+  }
+
+  .subscribe-pitch__inner {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+    max-width: 52rem;
+  }
+
+  .subscribe-pitch__inner p {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    max-width: 40rem;
+  }
+
+  .story {
+    padding: var(--space-8) 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .story__steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .story__steps li {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    padding-top: var(--space-3);
+    border-top: 2px solid var(--brass);
+  }
+
+  .story__when {
+    font-weight: 760;
+    font-stretch: 85%;
+    font-size: var(--step-1);
+  }
+
+  @media (max-width: 860px) {
+    .pull-section {
+      min-height: auto;
+    }
+
+    .pull-section__grid,
+    .range__head,
+    .teaser__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pull-section__copy,
+    .pull-section__scene {
+      position: static;
+    }
+
+    .teaser__link {
+      grid-column: 1;
+    }
+
+    .story__steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,105 @@
+---
+import { KANNADA } from '../../brand/kannada';
+import { href } from '../../lib/paths';
+import Mark from '../brand/Mark.astro';
+---
+
+<footer class="site-footer">
+  <div class="wrap site-footer__grid">
+    <div class="site-footer__brand">
+      <Mark size={44} mono />
+      <p class="site-footer__line">Filter coffee, pulled a metre high.</p>
+      <p class="site-footer__place">
+        Roasted in Bengaluru,{' '}
+        <span class="kannada" lang="kn">
+          {KANNADA.bengaluru.text}
+        </span>
+      </p>
+    </div>
+    <nav aria-label="Footer">
+      <ul class="site-footer__links">
+        <li>
+          <a href={href('/shop/')}>Shop</a>
+        </li>
+        <li>
+          <a href={href('/subscribe/')}>Subscribe</a>
+        </li>
+        <li>
+          <a href={href('/brew/')}>Brew guide</a>
+        </li>
+        <li>
+          <a href={href('/brand/')}>Brand guidelines</a>
+        </li>
+        <li>
+          <a href={href('/case-study/')}>Case study</a>
+        </li>
+      </ul>
+    </nav>
+    <p class="site-footer__concept">
+      Nore is a concept brand designed and built by{' '}
+      <a href="https://darshanpawar7.github.io">Darshan Pawar</a>. Nothing here is for sale and no
+      order is placed. The coffee regions are real; the brand, its lots and its prices are invented.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-9);
+    padding: var(--space-8) 0 var(--space-7);
+    background: var(--decoction);
+    color: var(--froth);
+    --paper: var(--decoction);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1.4fr;
+    gap: var(--space-7);
+  }
+
+  .site-footer__brand {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    color: var(--froth);
+  }
+
+  .site-footer__line {
+    font-size: var(--step-2);
+    font-weight: 760;
+    font-stretch: 80%;
+    line-height: 1.05;
+  }
+
+  .site-footer__place {
+    color: #cdbfa9;
+  }
+
+  .site-footer__links {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__links a {
+    display: inline-block;
+    padding: var(--space-1) 0;
+  }
+
+  .site-footer__concept {
+    padding-left: var(--space-5);
+    border-left: 1px solid var(--brass);
+    color: #e2d6c3;
+    font-family: var(--font-serif);
+  }
+
+  @media (max-width: 860px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+</style>

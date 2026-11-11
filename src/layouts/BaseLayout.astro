@@ -1,0 +1,70 @@
+---
+import '@fontsource-variable/anek-latin/standard.css';
+import '@fontsource-variable/anek-kannada/standard.css';
+import '@fontsource-variable/newsreader/standard.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/islands.css';
+import '../styles/transitions.css';
+import anekLatin from '@fontsource-variable/anek-latin/files/anek-latin-latin-standard-normal.woff2?url';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import { href } from '../lib/paths';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Pages that are not meant to be found by search, such as the confirmation page. */
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+const site = Astro.site ?? new URL('https://darshanpawar7.github.io');
+const canonical = new URL(Astro.url.pathname, site);
+const image = new URL(href('og.png'), site);
+const fullTitle =
+  title === 'Nore' ? 'Nore · Filter coffee, pulled a metre high' : `${title} · Nore`;
+---
+
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#f4eadb" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href={href('favicon.svg')} type="image/svg+xml" />
+    <link rel="preload" href={anekLatin} as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      // A page transition the browser skips (a typed address, a reload) rejects its promises. Nothing
+      // needs to hear about that, so they are caught here instead of reaching the console.
+      addEventListener('pagereveal', (event) => {
+        event.viewTransition?.ready.catch(() => {});
+        event.viewTransition?.finished.catch(() => {});
+      });
+      addEventListener('pageswap', (event) => {
+        event.viewTransition?.ready.catch(() => {});
+        event.viewTransition?.finished.catch(() => {});
+      });
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to the content
+    </a>
+    <SiteHeader />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

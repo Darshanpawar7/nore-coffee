@@ -1,0 +1,109 @@
+---
+import type { Product } from '../lib/catalog';
+import { PROCESS_LABEL, ROAST_LABEL, roastRank } from '../lib/catalog';
+import { formatInr } from '../lib/money';
+import { href } from '../lib/paths';
+import { variantsFor } from '../lib/pricing';
+import Pouch from './brand/Pouch.astro';
+
+/** A coffee in a grid. The data attributes let the shop filters sort and hide cards without re-rendering them. */
+interface Props {
+  product: Product;
+  index: number;
+  heading?: 'h2' | 'h3';
+}
+
+const { product, index, heading = 'h3' } = Astro.props;
+const from = variantsFor(product)[0]?.price;
+const Heading = heading;
+---
+
+<li
+  class:list={['card', `accent-${product.accent}`]}
+  data-product-card={product.id}
+  data-roast={product.roast}
+  data-roast-rank={roastRank(product.roast)}
+  data-process={product.process}
+  data-methods={product.greatFor.join(' ')}
+  data-price={product.price}
+  data-index={index}
+>
+  <a class="card__link" href={href(`/coffee/${product.id}/`)}>
+    <Pouch product={product} class="card__pouch" />
+    <Heading class="card__name">{product.name}</Heading>
+    <p class="card__notes">{product.notes.join(' · ')}</p>
+    <p class="card__meta">
+      <span>{ROAST_LABEL[product.roast]} roast</span>
+      <span aria-hidden="true">·</span>
+      <span>{product.kind === 'decoction' ? 'Ready to pour' : PROCESS_LABEL[product.process]}</span>
+    </p>
+    <p class="card__price price">
+      {product.kind === 'decoction'
+        ? `${from ? formatInr(from) : ''} a bottle`
+        : `From ${from ? formatInr(from) : ''}`}
+    </p>
+  </a>
+</li>
+
+<style>
+  .card {
+    list-style: none;
+  }
+
+  .card__link {
+    display: grid;
+    gap: var(--space-2);
+    height: 100%;
+    padding: var(--space-4) var(--space-4) var(--space-5);
+    border-radius: var(--radius-m);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      background-color 200ms var(--ease-out),
+      transform 200ms var(--ease-out);
+  }
+
+  .card__link:hover {
+    background: color-mix(in srgb, var(--accent) 9%, var(--raised));
+  }
+
+  .card__link:hover :global(.card__pouch) {
+    transform: rotate(-2deg) translateY(-4px);
+  }
+
+  .card__link :global(.card__pouch) {
+    padding: 0 var(--space-4);
+    transition: transform 260ms var(--ease-out);
+  }
+
+  .card__name {
+    margin-top: var(--space-2);
+    font-size: var(--step-2);
+  }
+
+  .card__notes {
+    font-family: var(--font-serif);
+    color: var(--ink-soft);
+  }
+
+  .card__meta {
+    display: flex;
+    gap: var(--space-2);
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+
+  .card__meta::before {
+    content: '';
+    align-self: center;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  .card__price {
+    margin-top: auto;
+    font-size: var(--step-1);
+  }
+</style>

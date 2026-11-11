@@ -1,0 +1,61 @@
+---
+import ShopFilters from '../../components/islands/ShopFilters';
+import ProductCard from '../../components/ProductCard.astro';
+import { getProducts } from '../../data/catalog';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const products = await getProducts();
+---
+
+<BaseLayout
+  title="Shop"
+  description="Seven South Indian coffees and a bottle of filter decoction: filter by roast, process and how you brew."
+>
+  <div class="wrap shop">
+    <header class="shop__head">
+      <h1 class="shop__title">The coffee</h1>
+      <p class="serif">
+        Every bag comes in 250 g, 500 g or 1 kg, ground the way you brew. Prices include taxes;
+        shipping is free over ₹999.
+      </p>
+    </header>
+    <ShopFilters client:load />
+    <ul id="shop-grid" class="shop__grid">
+      {products.map((product, index) => (
+        <ProductCard product={product} index={index} heading="h2" />
+      ))}
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .shop {
+    padding: var(--space-6) 0;
+  }
+
+  .shop__head {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 44rem;
+    margin-bottom: var(--space-5);
+  }
+
+  .shop__title {
+    font-size: var(--step-4);
+    font-weight: 800;
+    font-stretch: 75%;
+  }
+
+  .shop__head p {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .shop__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-4);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+  }
+</style>

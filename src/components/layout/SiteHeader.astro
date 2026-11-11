@@ -1,0 +1,114 @@
+---
+import Logo from '../brand/Logo.astro';
+import Cart from '../islands/Cart';
+import { href } from '../../lib/paths';
+
+const LINKS = [
+  { label: 'Shop', path: '/shop/' },
+  { label: 'Subscribe', path: '/subscribe/' },
+  { label: 'Brew guide', path: '/brew/' },
+  { label: 'Brand', path: '/brand/' },
+  { label: 'Case study', path: '/case-study/' },
+] as const;
+const here = Astro.url.pathname;
+const current = (path: string) =>
+  here.startsWith(href(path)) || (path === '/shop/' && here.startsWith(href('/coffee/')));
+---
+
+<header class="site-header">
+  <div class="site-header__bar wrap">
+    <a class="site-header__home" href={href('/')} aria-label="Nore, home">
+      <Logo />
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        {LINKS.map((link) => (
+          <li>
+            <a href={href(link.path)} aria-current={current(link.path) ? 'page' : undefined}>
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="site-header__cart">
+      <Cart client:load />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .site-header__bar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-5);
+    min-height: 68px;
+  }
+
+  .site-header__home {
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .site-nav ul {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--space-3);
+    font-weight: 560;
+    font-stretch: 100%;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+  }
+
+  .site-nav a:hover {
+    border-bottom-color: var(--line-strong);
+  }
+
+  .site-nav a[aria-current='page'] {
+    border-bottom-color: var(--brass);
+  }
+
+  @media (max-width: 860px) {
+    .site-header__bar {
+      grid-template-columns: 1fr auto;
+      gap: 0 var(--space-3);
+    }
+
+    .site-nav {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      margin-inline: calc(-1 * var(--gutter));
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .site-nav ul {
+      justify-content: flex-start;
+      padding: 0 var(--gutter) var(--space-1);
+    }
+
+    .site-nav a {
+      white-space: nowrap;
+    }
+  }
+</style>

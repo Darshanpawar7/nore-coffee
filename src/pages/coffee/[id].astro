@@ -1,0 +1,304 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Pouch from '../../components/brand/Pouch.astro';
+import ProductOptions from '../../components/islands/ProductOptions';
+import ProductCard from '../../components/ProductCard.astro';
+import TasteProfile from '../../components/TasteProfile.astro';
+import { getProducts } from '../../data/catalog';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { filterRecipe, RATIOS } from '../../lib/brew';
+import type { Product } from '../../lib/catalog';
+import { METHOD_LABEL, PROCESS_LABEL, ROAST_LABEL } from '../../lib/catalog';
+import { href } from '../../lib/paths';
+
+export const getStaticPaths = (async () => {
+  const products = await getProducts();
+  return products.map((product) => ({ params: { id: product.id }, props: { product, products } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  product: Product;
+  products: Product[];
+}
+
+const { product, products } = Astro.props;
+const recipe = filterRecipe(2, 'classic');
+const method = product.greatFor[0] ?? 'south-indian-filter';
+const ratio = RATIOS.find((card) => card.id === method);
+
+// Two coffees to try next: ones that brew the same way but taste different, in a stable order.
+const others = products.filter((item) => item.id !== product.id && item.kind === 'beans');
+const pairs = [
+  ...others.filter((item) => item.greatFor.includes(method) && item.roast !== product.roast),
+  ...others,
+]
+  .filter((item, index, list) => list.indexOf(item) === index)
+  .slice(0, 2);
+---
+
+<BaseLayout
+  title={product.name}
+  description={`${product.name}: ${product.notes.join(', ')}. ${product.story}`}
+>
+  <article class={`product accent-${product.accent}`}>
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={href('/shop/')}>Shop</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{product.name}</span>
+      </nav>
+      <div class="product__grid">
+        <div class="product__stage" data-tilt>
+          <Pouch product={product} draw />
+        </div>
+        <div class="product__info">
+          <p class="eyebrow">
+            {product.origin.region}, {product.origin.state}
+          </p>
+          <h1 class="product__name">{product.name}</h1>
+          <p class="product__notes serif">{product.notes.join(', ')}</p>
+          <p class="product__story serif">{product.story}</p>
+          <ProductOptions client:load productId={product.id} />
+          <p class="product__concept">
+            This is a concept shop: nothing is for sale and no order is placed.
+          </p>
+        </div>
+      </div>
+
+      <div class="product__details">
+        <section aria-labelledby="facts-title">
+          <h2 id="facts-title" class="product__subtitle">
+            The facts
+          </h2>
+          <dl class="facts">
+            <div>
+              <dt>Grown in</dt>
+              <dd>
+                {product.origin.region}, {product.origin.state}
+              </dd>
+            </div>
+            {product.origin.altitude && (
+              <div>
+                <dt>Altitude</dt>
+                <dd>{product.origin.altitude}</dd>
+              </div>
+            )}
+            <div>
+              <dt>Variety</dt>
+              <dd>{product.variety}</dd>
+            </div>
+            <div>
+              <dt>Process</dt>
+              <dd>{PROCESS_LABEL[product.process]}</dd>
+            </div>
+            <div>
+              <dt>Roast</dt>
+              <dd>{ROAST_LABEL[product.roast]}</dd>
+            </div>
+            {product.kind === 'beans' && product.chicory > 0 && (
+              <div>
+                <dt>Chicory</dt>
+                <dd>{product.chicory}% by weight</dd>
+              </div>
+            )}
+            <div>
+              <dt>Great for</dt>
+              <dd>{product.greatFor.map((item) => METHOD_LABEL[item]).join(', ')}</dd>
+            </div>
+          </dl>
+        </section>
+        <section aria-labelledby="taste-title">
+          <h2 id="taste-title" class="product__subtitle">
+            How it tastes
+          </h2>
+          <TasteProfile profile={product.profile} />
+        </section>
+        <section aria-labelledby="recipe-title" class="recipe">
+          <h2 id="recipe-title" class="product__subtitle">
+            Brew it
+          </h2>
+          {method === 'south-indian-filter' ? (
+            <>
+              <p class="serif">
+                For two cups: {recipe.powder} g of filter grind, {recipe.water} ml of water just off
+                the boil. About {recipe.decoction} ml of decoction drips through in twelve to
+                fifteen minutes; add it to {recipe.milk} ml of hot milk, one part to three.
+              </p>
+              <a href={href('/brew/')}>The full guide, with a drip timer</a>
+            </>
+          ) : ratio ? (
+            <>
+              <p class="serif">
+                {ratio.method}: one part coffee to {ratio.ratio} of water,{' '}
+                {ratio.grind.toLowerCase()} grind,{' '}
+                {ratio.time.charAt(0).toLowerCase() + ratio.time.slice(1)}. A starting point; adjust
+                to taste.
+              </p>
+              <a href={href('/brew/')}>More ratios in the brew guide</a>
+            </>
+          ) : null}
+        </section>
+      </div>
+
+      <section class="pairs" aria-labelledby="pairs-title">
+        <h2 id="pairs-title" class="product__subtitle">
+          Pairs with
+        </h2>
+        <ul class="pairs__grid">
+          {pairs.map((item, index) => (
+            <ProductCard product={item} index={index} />
+          ))}
+        </ul>
+      </section>
+    </div>
+  </article>
+</BaseLayout>
+
+<script>
+  // The bag leans a little towards the pointer, as if picked up off a shelf. Nothing under reduced motion.
+  const stage = document.querySelector<HTMLElement>('[data-tilt]');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (stage && !still) {
+    stage.addEventListener('pointermove', (event) => {
+      const box = stage.getBoundingClientRect();
+      const x = (event.clientX - box.left) / box.width - 0.5;
+      const y = (event.clientY - box.top) / box.height - 0.5;
+      stage.style.setProperty('--tilt-x', `${(-y * 6).toFixed(2)}deg`);
+      stage.style.setProperty('--tilt-y', `${(x * 8).toFixed(2)}deg`);
+    });
+    stage.addEventListener('pointerleave', () => {
+      stage.style.setProperty('--tilt-x', '0deg');
+      stage.style.setProperty('--tilt-y', '0deg');
+    });
+  }
+</script>
+
+<style>
+  .product {
+    padding: var(--space-5) 0 var(--space-7);
+  }
+
+  .crumbs {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  .product__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  .product__stage {
+    position: sticky;
+    top: 96px;
+    padding: var(--space-6);
+    border-radius: var(--radius-l);
+    background: color-mix(in srgb, var(--accent) 10%, var(--raised));
+    perspective: 900px;
+  }
+
+  .product__stage :global(.pouch) {
+    max-width: 380px;
+    margin: 0 auto;
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 180ms ease-out;
+  }
+
+  .product__info {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .product__name {
+    font-size: var(--step-4);
+    font-weight: 800;
+    font-stretch: 75%;
+  }
+
+  .product__notes {
+    font-size: var(--step-2);
+    font-style: italic;
+  }
+
+  .product__story {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .product__concept {
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  .product__details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--line);
+  }
+
+  .product__subtitle {
+    margin-bottom: var(--space-4);
+    font-size: var(--step-2);
+  }
+
+  .facts {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .facts div {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .facts dt {
+    color: var(--ink-soft);
+  }
+
+  .facts dd {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .recipe {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    font-size: var(--step-1);
+  }
+
+  .pairs {
+    margin-top: var(--space-8);
+  }
+
+  .pairs__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 300px));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (max-width: 900px) {
+    .product__grid,
+    .product__details {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .product__stage {
+      position: static;
+    }
+  }
+</style>
