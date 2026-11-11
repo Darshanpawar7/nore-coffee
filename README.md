@@ -142,4 +142,4 @@ scripts/         Font subsetting, screenshots, the WebAssembly fallback
 
 ## Licence
 
-MIT. Designed and built by [Darshan P Pawar](https://darshanpawar7.github.io). Nore is a concept: the coffee regions are real, while the brand, its lots and its prices are invented.
+MIT. Designed and built by [Darshan P Pawar](https://darshanpawar7.github.io). The subset fonts in `src/fonts` come from Anek and Newsreader under the SIL Open Font License; see [src/fonts/OFL.txt](src/fonts/OFL.txt). Nore is a concept: the coffee regions are real, while the brand, its lots and its prices are invented.
