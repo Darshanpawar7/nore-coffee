@@ -49,7 +49,7 @@ describe('the identity in code', () => {
   });
 
   it('uses no Kannada beyond its three words', () => {
-    const allowed = new Set(Object.values(KANNADA).map((word) => word.text));
+    const allowed = new Set<string>(Object.values(KANNADA).map((word) => word.text));
     const kannada = /[ಀ-೿]+/g;
     const root = fileURLToPath(new URL('../src', import.meta.url));
     for (const file of sources(root)) {
