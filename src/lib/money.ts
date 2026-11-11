@@ -80,6 +80,14 @@ export function percentOf(amount: Paise, percent: number): Paise {
   return paise(divideToNearest(amount * percent, PERCENT_BASE));
 }
 
+/** An amount shared out over a whole number of parts, each rounded to the nearest paisa. */
+export function divide(amount: Paise, parts: number): Paise {
+  if (!Number.isSafeInteger(parts) || parts <= 0) {
+    throw new RangeError(`Parts must be a whole number above zero, received ${String(parts)}.`);
+  }
+  return paise(divideToNearest(amount, parts));
+}
+
 /** The nearest whole rupee, still counted in paise. */
 export function roundToRupee(amount: Paise): Paise {
   const wholeRupees = divideToNearest(amount, PAISE_PER_RUPEE);

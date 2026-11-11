@@ -1,0 +1,148 @@
+import type { Product } from './catalog';
+
+/**
+ * The range. The regions, varieties and processes are real; the brand, the lot names and the prices
+ * are invented for this concept. Prices are in whole rupees, taxes included: 250 g for beans.
+ */
+export const PRODUCTS: readonly Product[] = [
+  {
+    kind: 'beans',
+    id: 'meter-kaapi',
+    name: 'Meter Kaapi',
+    accent: 'red-earth',
+    notes: ['Jaggery', 'Cocoa', 'Toasted nuts'],
+    story:
+      'The house blend: roasted dark and cut with a fifth of chicory, the way Bengaluru’s darshinis have always made it. It is built for hot milk and a little sugar, and it does not apologise.',
+    price: 420,
+    roast: 'dark',
+    greatFor: ['south-indian-filter', 'moka-pot'],
+    profile: { acidity: 1, body: 5, sweetness: 3, bitterness: 4, aroma: 4 },
+    origin: { region: 'Chikkamagaluru and Kodagu', state: 'Karnataka' },
+    process: 'blend',
+    variety: 'Arabica and robusta, with chicory',
+    chicory: 20,
+  },
+  {
+    kind: 'beans',
+    id: 'baba-budan',
+    name: 'Baba Budan',
+    accent: 'monsoon',
+    notes: ['Orange', 'Caramel', 'Almond'],
+    story:
+      'Coffee first took root in India on these hills, around 1670, from seven seeds carried home from Mocha. This lot is washed SLN 795 from about 1,300 m: bright, clean and kind to a pour-over.',
+    price: 560,
+    roast: 'medium',
+    greatFor: ['pour-over', 'south-indian-filter', 'french-press'],
+    profile: { acidity: 4, body: 3, sweetness: 4, bitterness: 2, aroma: 4 },
+    origin: { region: 'Baba Budangiri, Chikkamagaluru', state: 'Karnataka', altitude: '1,300 m' },
+    process: 'washed',
+    variety: 'Arabica, SLN 795',
+    chicory: 0,
+  },
+  {
+    kind: 'beans',
+    id: 'monsooned-malabar',
+    name: 'Monsooned Malabar',
+    accent: 'pepper',
+    notes: ['Cedar', 'Spice', 'Cocoa'],
+    story:
+      'Green beans spend the monsoon in open-sided warehouses on the coast, swelling in the wet wind until they turn pale gold. The long sea voyage to Europe once did this by accident; now it is done on purpose.',
+    price: 520,
+    roast: 'medium-dark',
+    greatFor: ['french-press', 'espresso', 'south-indian-filter'],
+    profile: { acidity: 1, body: 5, sweetness: 2, bitterness: 3, aroma: 4 },
+    origin: { region: 'The Malabar coast', state: 'Karnataka and Kerala' },
+    process: 'monsooned',
+    variety: 'Arabica',
+    chicory: 0,
+  },
+  {
+    kind: 'beans',
+    id: 'biligiri-natural',
+    name: 'Biligiri Natural',
+    accent: 'hibiscus',
+    notes: ['Berry jam', 'Cacao', 'Red wine'],
+    story:
+      'Dried whole in the cherry on raised beds in the BR Hills, so the fruit seeps into the bean before it is hulled. It tastes of jam, which surprises people who think they know Indian coffee.',
+    price: 640,
+    roast: 'medium',
+    greatFor: ['pour-over', 'french-press', 'cold-brew'],
+    profile: { acidity: 3, body: 4, sweetness: 5, bitterness: 2, aroma: 5 },
+    origin: { region: 'Biligiri Rangana Hills', state: 'Karnataka', altitude: '1,200 m' },
+    process: 'natural',
+    variety: 'Arabica',
+    chicory: 0,
+  },
+  {
+    kind: 'beans',
+    id: 'araku-dawn',
+    name: 'Araku Dawn',
+    accent: 'turmeric',
+    notes: ['Stone fruit', 'Cane sugar', 'Honey'],
+    story:
+      'Grown on small farms in the Eastern Ghats, a long way from the Western Ghats where most Indian coffee lives. Honey-processed: the sticky fruit stays on while the beans dry, for stone fruit and a clean sweetness.',
+    price: 620,
+    roast: 'light-medium',
+    greatFor: ['pour-over', 'south-indian-filter', 'cold-brew'],
+    profile: { acidity: 3, body: 3, sweetness: 5, bitterness: 1, aroma: 4 },
+    origin: { region: 'Araku Valley', state: 'Andhra Pradesh', altitude: '900 to 1,100 m' },
+    process: 'honey',
+    variety: 'Arabica',
+    chicory: 0,
+  },
+  {
+    kind: 'beans',
+    id: 'kodagu-peaberry',
+    name: 'Kodagu Peaberry',
+    accent: 'areca',
+    notes: ['Dark chocolate', 'Black pepper', 'Molasses'],
+    story:
+      'Now and then a cherry grows one round seed instead of two flat ones; sorted out by hand, these peaberries roast evenly and brew thick. Washed robusta with the heft to stand up to a lot of milk.',
+    price: 480,
+    roast: 'medium-dark',
+    greatFor: ['south-indian-filter', 'espresso', 'moka-pot'],
+    profile: { acidity: 1, body: 5, sweetness: 2, bitterness: 4, aroma: 3 },
+    origin: { region: 'Kodagu', state: 'Karnataka', altitude: '800 to 1,000 m' },
+    process: 'washed',
+    variety: 'Robusta peaberry',
+    chicory: 0,
+  },
+  {
+    kind: 'beans',
+    id: 'nilgiri-mist',
+    name: 'Nilgiri Mist',
+    accent: 'nilgiri',
+    notes: ['Jasmine', 'Lemon peel', 'Black tea'],
+    story:
+      'From the blue hills better known for their tea, grown in the same mist, and it shows: floral, bright and light on its feet. Brew it black. Milk would drown it.',
+    price: 600,
+    roast: 'light',
+    greatFor: ['pour-over', 'cold-brew'],
+    profile: { acidity: 5, body: 2, sweetness: 3, bitterness: 1, aroma: 5 },
+    origin: { region: 'The Nilgiris', state: 'Tamil Nadu', altitude: '1,500 m' },
+    process: 'washed',
+    variety: 'Arabica',
+    chicory: 0,
+  },
+  {
+    kind: 'decoction',
+    id: 'decoction-no-1',
+    name: 'Decoction No. 1',
+    accent: 'jacaranda',
+    notes: ['Jaggery', 'Cocoa', 'Ready to pour'],
+    story:
+      'Meter Kaapi, dripped slowly through big brass filters every morning and bottled before the city wakes up. One part to three of hot milk and breakfast is done. Keep it in the fridge.',
+    price: 350,
+    roast: 'dark',
+    greatFor: ['south-indian-filter'],
+    profile: { acidity: 1, body: 5, sweetness: 3, bitterness: 4, aroma: 3 },
+    origin: { region: 'Brewed in Bengaluru', state: 'Karnataka' },
+    process: 'blend',
+    variety: 'The Meter Kaapi blend',
+    volumeMl: 500,
+  },
+];
+
+export function productById(id: string): Product | undefined {
+  return PRODUCTS.find((product) => product.id === id);
+}
