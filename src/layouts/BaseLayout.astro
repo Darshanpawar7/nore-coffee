@@ -47,14 +47,13 @@ const fullTitle =
     <script is:inline>
       // A page transition the browser skips (a typed address, a reload) rejects its promises. Nothing
       // needs to hear about that, so they are caught here instead of reaching the console.
-      addEventListener('pagereveal', (event) => {
-        event.viewTransition?.ready.catch(() => {});
-        event.viewTransition?.finished.catch(() => {});
-      });
-      addEventListener('pageswap', (event) => {
-        event.viewTransition?.ready.catch(() => {});
-        event.viewTransition?.finished.catch(() => {});
-      });
+      const ignore = () => undefined;
+      const quiet = (event) => {
+        event.viewTransition?.ready.catch(ignore);
+        event.viewTransition?.finished.catch(ignore);
+      };
+      addEventListener('pagereveal', quiet);
+      addEventListener('pageswap', quiet);
     </script>
   </head>
   <body>
