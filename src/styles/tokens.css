@@ -1,0 +1,91 @@
+/* Nore's identity as tokens: South Indian modernism. Brass and steel, mosaic floors, a kolam at dawn. */
+
+:root {
+  /* The core palette. Mirrored in src/brand/palette.ts; a test keeps the two in step. */
+  --decoction: #1f1410;
+  --froth: #f4eadb;
+  --milk: #fbf6ee;
+  --brass: #b5862b;
+  --earth: #a8402a;
+  --steel: #c9ccd1;
+
+  /* Roles. Brass is for rules, small marks and focus, never for text: it is 2.8:1 on froth. */
+  --ink: var(--decoction);
+  --ink-soft: #5a463c;
+  --paper: var(--froth);
+  --raised: var(--milk);
+  --line: #dccdb6;
+  --line-strong: #bfa98a;
+  --action: var(--earth);
+  --on-action: var(--milk);
+  --focus: var(--brass);
+  --kraft: #c9a97b;
+  --kraft-shade: #a98b61;
+
+  /* Type. Anek's width axis does the work: condensed and heavy for headlines, normal for reading. */
+  --font-sans: 'Anek Latin Variable', 'Anek Kannada Variable', system-ui, sans-serif;
+  --font-kannada:
+    'Anek Kannada Variable', 'Anek Latin Variable', 'Noto Sans Kannada', 'Tunga', sans-serif;
+  --font-serif: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  --step--1: clamp(0.84rem, 0.8rem + 0.15vw, 0.92rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  --step-1: clamp(1.2rem, 1.1rem + 0.45vw, 1.45rem);
+  --step-2: clamp(1.5rem, 1.3rem + 0.9vw, 2.1rem);
+  --step-3: clamp(2rem, 1.6rem + 1.9vw, 3.3rem);
+  --step-4: clamp(2.8rem, 2rem + 4vw, 5.6rem);
+  --step-5: clamp(4.2rem, 2.4rem + 9vw, 11rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --measure: 62ch;
+  --page: 1240px;
+
+  --radius-s: 3px;
+  --radius-m: 8px;
+  --radius-l: 18px;
+  --shadow-1: 0 1px 0 rgb(31 20 16 / 0.06), 0 4px 14px rgb(31 20 16 / 0.07);
+  --shadow-2: 0 18px 40px rgb(31 20 16 / 0.16);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Each coffee owns one accent, from where it grows. --accent-ink is chosen for contrast on the accent. */
+.accent-red-earth {
+  --accent: #a8402a;
+  --accent-ink: #fbf6ee;
+}
+.accent-monsoon {
+  --accent: #2e5e4a;
+  --accent-ink: #fbf6ee;
+}
+.accent-nilgiri {
+  --accent: #3d6c9e;
+  --accent-ink: #fbf6ee;
+}
+.accent-jacaranda {
+  --accent: #6e4fa0;
+  --accent-ink: #fbf6ee;
+}
+.accent-turmeric {
+  --accent: #d99a1c;
+  --accent-ink: #1f1410;
+}
+.accent-hibiscus {
+  --accent: #b8324f;
+  --accent-ink: #fbf6ee;
+}
+.accent-pepper {
+  --accent: #33302b;
+  --accent-ink: #fbf6ee;
+}
+.accent-areca {
+  --accent: #7a5a2b;
+  --accent-ink: #fbf6ee;
+}

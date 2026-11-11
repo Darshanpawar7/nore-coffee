@@ -1,0 +1,183 @@
+---
+import type { Product } from '../../lib/catalog';
+import { ROAST_LABEL } from '../../lib/catalog';
+import Kolam from './Kolam.astro';
+
+/**
+ * A flat-bottom coffee pouch: kraft body, crimped seal, a one-way degassing valve, and a label panel in
+ * the coffee's accent carrying its kolam. Drawn in SVG; the label's text is real text, in the site's
+ * fonts. `name` sets the view-transition name, so a bag on a card becomes the bag on its page.
+ */
+interface Props {
+  product: Product;
+  /** The weight printed on the bag. */
+  weight?: string;
+  draw?: boolean;
+  transition?: boolean;
+  class?: string;
+}
+
+const { product, weight, draw = false, transition = true, class: className } = Astro.props;
+const printed =
+  weight ?? (product.kind === 'decoction' ? `${String(product.volumeMl)} ml` : '250 g');
+const grain = `grain-${product.id}`;
+const shade = `shade-${product.id}`;
+// Short names sit on one line; longer ones break after the first word ("Decoction / No. 1").
+const space = product.name.indexOf(' ');
+const lines =
+  product.name.length <= 13 || space === -1
+    ? [product.name]
+    : [product.name.slice(0, space), product.name.slice(space + 1)];
+---
+
+<figure
+  class:list={['pouch', `accent-${product.accent}`, className]}
+  data-transition={transition ? product.id : undefined}
+>
+  <svg viewBox="0 0 300 420" role="img" aria-label={`A bag of ${product.name}`}>
+    <defs>
+      <filter id={grain} x="0" y="0" width="100%" height="100%">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.9"
+          numOctaves="2"
+          seed="7"
+          result="noise"
+        ></feTurbulence>
+        <feColorMatrix type="saturate" values="0" in="noise" result="grey"></feColorMatrix>
+        <feComponentTransfer in="grey" result="faint">
+          <feFuncA type="linear" slope="0.18"></feFuncA>
+        </feComponentTransfer>
+        <feComposite in="faint" in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+      <linearGradient id={shade} x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#000" stop-opacity="0.22"></stop>
+        <stop offset="0.18" stop-color="#000" stop-opacity="0.04"></stop>
+        <stop offset="0.5" stop-color="#fff" stop-opacity="0.1"></stop>
+        <stop offset="0.82" stop-color="#000" stop-opacity="0.05"></stop>
+        <stop offset="1" stop-color="#000" stop-opacity="0.25"></stop>
+      </linearGradient>
+    </defs>
+    <ellipse cx="150" cy="404" rx="128" ry="10" fill="#1f1410" opacity="0.16"></ellipse>
+    <path
+      class="pouch__body"
+      d="M42 26h216c6 0 9 4 9.5 10l6 330c0.2 9-4 14-12 15H38.5c-8-1-12.2-6-12-15l6-330c0.5-6 3.5-10 9.5-10z"
+    ></path>
+    <path
+      d="M42 26h216c6 0 9 4 9.5 10l6 330c0.2 9-4 14-12 15H38.5c-8-1-12.2-6-12-15l6-330c0.5-6 3.5-10 9.5-10z"
+      filter={`url(#${grain})`}
+      fill="#7a5a2b"
+    ></path>
+    <path
+      d="M42 26h216c6 0 9 4 9.5 10l6 330c0.2 9-4 14-12 15H38.5c-8-1-12.2-6-12-15l6-330c0.5-6 3.5-10 9.5-10z"
+      fill={`url(#${shade})`}
+    ></path>
+    <path
+      d="M30 352h240l2.6 14c0.2 9-4 14-12 15H38.5c-8-1-12.2-6-12-15z"
+      fill="#000"
+      opacity="0.08"
+    ></path>
+    <path
+      d="M30 352 52 381M270 352 248 381"
+      stroke="#000"
+      stroke-opacity="0.12"
+      stroke-width="1.5"
+    ></path>
+    <rect x="34" y="34" width="232" height="16" fill="#000" opacity="0.07"></rect>
+    <path
+      class="pouch__crimp"
+      d="M38 36v12M46 36v12M54 36v12M62 36v12M70 36v12M78 36v12M86 36v12M94 36v12M102 36v12M110 36v12M118 36v12M126 36v12M134 36v12M142 36v12M150 36v12M158 36v12M166 36v12M174 36v12M182 36v12M190 36v12M198 36v12M206 36v12M214 36v12M222 36v12M230 36v12M238 36v12M246 36v12M254 36v12M262 36v12"
+    ></path>
+    <circle cx="233" cy="82" r="10" fill="#efe2cc"></circle>
+    <circle cx="233" cy="82" r="5.5" fill="none" stroke="#a98b61" stroke-width="1.5"></circle>
+    <g class="pouch__label">
+      <rect x="62" y="104" width="176" height="234" rx="4" fill="var(--accent)"></rect>
+      <rect
+        x="68"
+        y="110"
+        width="164"
+        height="222"
+        rx="2"
+        fill="none"
+        stroke="var(--accent-ink)"
+        stroke-opacity="0.35"
+      ></rect>
+      <text x="150" y="128" text-anchor="middle" class="pouch__brand" fill="var(--accent-ink)">
+        NORE
+      </text>
+      <Kolam
+        seed={product.name}
+        draw={draw}
+        strokeWidth={2.6}
+        x={106}
+        y={138}
+        size={88}
+        class="pouch__kolam"
+      />
+      {lines.map((line, index) => (
+        <text
+          x="150"
+          y={258 + index * 24 - (lines.length - 1) * 12}
+          text-anchor="middle"
+          class="pouch__name"
+          fill="var(--accent-ink)"
+        >
+          {line}
+        </text>
+      ))}
+      <text x="150" y="296" text-anchor="middle" class="pouch__meta" fill="var(--accent-ink)">
+        {product.origin.region.length > 26 ? product.origin.state : product.origin.region}
+      </text>
+      <text x="150" y="318" text-anchor="middle" class="pouch__meta" fill="var(--accent-ink)">
+        {ROAST_LABEL[product.roast]} · {printed}
+      </text>
+    </g>
+  </svg>
+</figure>
+
+<style>
+  .pouch {
+    margin: 0;
+    color: var(--accent-ink);
+  }
+
+  .pouch svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .pouch__body {
+    fill: var(--kraft);
+  }
+
+  .pouch__crimp {
+    stroke: #000;
+    stroke-opacity: 0.14;
+    stroke-width: 1.2;
+  }
+
+  .pouch__brand {
+    font: 800 13px var(--font-sans);
+    font-stretch: 120%;
+    letter-spacing: 0.32em;
+    opacity: 0.85;
+  }
+
+  .pouch__kolam {
+    color: var(--accent-ink);
+    opacity: 0.92;
+  }
+
+  .pouch__name {
+    font: 800 25px var(--font-sans);
+    font-stretch: 75%;
+    letter-spacing: -0.01em;
+  }
+
+  .pouch__meta {
+    font: 500 11.5px var(--font-sans);
+    font-stretch: 105%;
+    opacity: 0.9;
+  }
+</style>

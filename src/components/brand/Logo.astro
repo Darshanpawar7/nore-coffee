@@ -1,0 +1,55 @@
+---
+import { KANNADA } from '../../brand/kannada';
+import Mark from './Mark.astro';
+
+/** The lock-up: the froth ring, "Nore" set tight and condensed, and ನೊರೆ beside it after a brass rule. */
+interface Props {
+  size?: 'small' | 'large';
+  mono?: boolean;
+}
+
+const { size = 'small', mono = false } = Astro.props;
+---
+
+<span class:list={['logo', `logo--${size}`]}>
+  <Mark size={size === 'large' ? 72 : 34} mono={mono} />
+  <span class="logo__word">Nore</span>
+  <span class="logo__rule" aria-hidden="true"></span>
+  <span class="logo__kannada kannada" lang="kn">
+    {KANNADA.nore.text}
+  </span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .logo__word {
+    font-weight: 800;
+    font-stretch: 75%;
+    font-size: 1.9em;
+    letter-spacing: -0.02em;
+  }
+
+  .logo__rule {
+    width: 1px;
+    height: 1.2em;
+    background: var(--brass);
+  }
+
+  .logo__kannada {
+    font-weight: 600;
+    font-size: 1.15em;
+    font-stretch: 90%;
+    color: var(--ink-soft);
+  }
+
+  .logo--large {
+    font-size: clamp(1.4rem, 1rem + 2vw, 2.4rem);
+  }
+</style>

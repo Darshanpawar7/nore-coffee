@@ -1,0 +1,146 @@
+---
+/**
+ * The pull: coffee poured a metre through the air from a tumbler held high into a davara held low,
+ * which cools it and whips up the nore. As the section scrolls past, the stream falls and the froth
+ * rises: CSS scroll-driven animation, no script. Where that is not supported, or motion is reduced,
+ * the scene is simply shown complete.
+ */
+const ticks = Array.from({ length: 11 }, (_, index) => index);
+---
+
+<div class="pull" aria-hidden="true">
+  <svg viewBox="0 0 360 900" class="pull__svg">
+    <defs>
+      <linearGradient id="steel" x1="0" x2="1">
+        <stop offset="0" stop-color="#9ea3aa"></stop>
+        <stop offset="0.35" stop-color="#e9ebee"></stop>
+        <stop offset="0.6" stop-color="#c9ccd1"></stop>
+        <stop offset="1" stop-color="#8b9097"></stop>
+      </linearGradient>
+      <linearGradient id="stream" x1="0" x2="1">
+        <stop offset="0" stop-color="#3a2418"></stop>
+        <stop offset="0.5" stop-color="#7a4a2c"></stop>
+        <stop offset="1" stop-color="#3a2418"></stop>
+      </linearGradient>
+    </defs>
+
+    <g class="pull__ruler">
+      <line x1="66" y1="120" x2="66" y2="800"></line>
+      {ticks.map((tick) => (
+        <g>
+          <line
+            x1="66"
+            x2={tick % 5 === 0 ? 48 : 56}
+            y1={120 + tick * 68}
+            y2={120 + tick * 68}
+          ></line>
+          {tick % 5 === 0 && (
+            <text x="42" y={124 + tick * 68} text-anchor="end">
+              {100 - tick * 10} cm
+            </text>
+          )}
+        </g>
+      ))}
+    </g>
+
+    <!-- The tumbler, tipped to pour. -->
+    <g transform="rotate(-38 212 104)">
+      <path d="M182 40h64l-8 112h-48z" fill="url(#steel)"></path>
+      <path d="M180 40h68" stroke="#7d828a" stroke-width="5" stroke-linecap="round"></path>
+      <path
+        d="M187 70h54M189 100h50"
+        stroke="#ffffff"
+        stroke-opacity="0.35"
+        stroke-width="2"
+      ></path>
+    </g>
+
+    <!-- The stream: a metre of decoction and milk in the air. -->
+    <path
+      class="pull__stream"
+      d="M168 92c4 120 8 260 9 380c0.6 110 0.6 200 0.4 302"
+      pathLength="1"
+      stroke="url(#stream)"
+      stroke-width="7"
+      stroke-linecap="round"
+      fill="none"
+    ></path>
+
+    <!-- The davara, and the froth rising in it. -->
+    <g class="pull__froth">
+      <ellipse cx="178" cy="786" rx="78" ry="12" fill="#efe2c8"></ellipse>
+      <circle cx="150" cy="782" r="5" fill="#fbf6ee"></circle>
+      <circle cx="168" cy="777" r="7" fill="#fbf6ee"></circle>
+      <circle cx="190" cy="779" r="6" fill="#fbf6ee"></circle>
+      <circle cx="210" cy="783" r="4.5" fill="#fbf6ee"></circle>
+      <circle cx="132" cy="787" r="3.5" fill="#fbf6ee"></circle>
+      <circle cx="226" cy="788" r="3" fill="#fbf6ee"></circle>
+    </g>
+    <path d="M86 790h184c-6 32-30 52-92 52s-86-20-92-52z" fill="url(#steel)"></path>
+    <path d="M82 790h192" stroke="#7d828a" stroke-width="6" stroke-linecap="round"></path>
+    <ellipse cx="178" cy="852" rx="60" ry="5" fill="#1f1410" opacity="0.14"></ellipse>
+  </svg>
+</div>
+
+<style>
+  .pull {
+    width: min(100%, 360px);
+  }
+
+  .pull__svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .pull__ruler line {
+    stroke: var(--brass);
+    stroke-width: 1.5;
+  }
+
+  .pull__ruler text {
+    fill: var(--ink-soft);
+    font: 600 13px var(--font-sans);
+  }
+
+  .pull__froth {
+    transform-origin: 178px 790px;
+  }
+
+  /* Scroll-driven: the stream falls and the froth rises while the section crosses the screen. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .pull__stream {
+        stroke-dasharray: 1;
+        animation: pour linear both;
+        animation-timeline: --pull;
+        animation-range: contain 0% contain 55%;
+      }
+
+      .pull__froth {
+        animation: rise linear both;
+        animation-timeline: --pull;
+        animation-range: contain 35% contain 90%;
+      }
+    }
+  }
+
+  @keyframes pour {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scaleY(0.3);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

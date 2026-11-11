@@ -1,0 +1,93 @@
+---
+import type { TasteProfile } from '../lib/catalog';
+
+/** The taste profile as a five-pointed radar, with the numbers also given as a list for screen readers. */
+interface Props {
+  profile: TasteProfile;
+}
+
+const { profile } = Astro.props;
+const AXES = [
+  ['acidity', 'Acidity'],
+  ['body', 'Body'],
+  ['sweetness', 'Sweetness'],
+  ['bitterness', 'Bitterness'],
+  ['aroma', 'Aroma'],
+] as const;
+const centre = { x: 130, y: 118 };
+const radius = 78;
+const at = (index: number, scale: number) => {
+  const angle = (index / AXES.length) * 2 * Math.PI - Math.PI / 2;
+  return {
+    x: centre.x + radius * scale * Math.cos(angle),
+    y: centre.y + radius * scale * Math.sin(angle),
+  };
+};
+const ring = (scale: number) =>
+  AXES.map((_, index) => at(index, scale))
+    .map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`)
+    .join(' ');
+const shape = AXES.map(([key], index) => at(index, profile[key] / 5))
+  .map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`)
+  .join(' ');
+---
+
+<figure class="taste">
+  <svg viewBox="0 0 260 236" aria-hidden="true">
+    {[0.2, 0.4, 0.6, 0.8, 1].map((scale) => (
+      <polygon points={ring(scale)} class="taste__ring" />
+    ))}
+    {AXES.map((_, index) => {
+      const end = at(index, 1);
+      return <line x1={centre.x} y1={centre.y} x2={end.x} y2={end.y} class="taste__spoke" />;
+    })}
+    <polygon points={shape} class="taste__shape" />
+    {AXES.map(([key, label], index) => {
+      const point = at(index, 1.24);
+      return (
+        <text x={point.x} y={point.y + 4} text-anchor="middle" class="taste__label">
+          {label} {profile[key]}
+        </text>
+      );
+    })}
+  </svg>
+  <figcaption class="visually-hidden">
+    Taste, out of five: {AXES.map(([key, label]) => `${label} ${String(profile[key])}`).join(', ')}.
+  </figcaption>
+</figure>
+
+<style>
+  .taste {
+    margin: 0;
+    max-width: 320px;
+  }
+
+  .taste svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .taste__ring {
+    fill: none;
+    stroke: var(--line);
+  }
+
+  .taste__spoke {
+    stroke: var(--line);
+  }
+
+  .taste__shape {
+    fill: var(--accent);
+    fill-opacity: 0.22;
+    stroke: var(--accent);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+
+  .taste__label {
+    fill: var(--ink-soft);
+    font: 600 11px var(--font-sans);
+    font-stretch: 105%;
+  }
+</style>

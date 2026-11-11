@@ -1,0 +1,99 @@
+---
+import { dotSpacing, kolam } from '../../lib/kolam/kolam';
+import type { Arrangement } from '../../lib/kolam/arrangement';
+
+/**
+ * A kolam, drawn at build time: inline SVG, no script. Colour comes from currentColor. With `draw`, the
+ * line draws itself once when the element first appears (and not at all under reduced motion).
+ */
+interface Props {
+  seed: string;
+  arrangement?: Arrangement;
+  class?: string;
+  draw?: boolean;
+  /** Read out to screen readers; leave it out for a decorative kolam. */
+  label?: string;
+  strokeWidth?: number;
+  /** Placement when nested inside another SVG. */
+  x?: number;
+  y?: number;
+  size?: number;
+}
+
+const {
+  seed,
+  arrangement,
+  class: className,
+  draw = false,
+  label,
+  strokeWidth = 2.4,
+  x,
+  y,
+  size,
+} = Astro.props;
+const figure = kolam(seed, arrangement ? { arrangement } : {});
+const dot = dotSpacing() * 0.08;
+---
+
+<svg
+  class:list={['kolam', { 'kolam--draw': draw }, className]}
+  viewBox={figure.viewBox}
+  x={x}
+  y={y}
+  width={size}
+  height={size}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+>
+  <g
+    fill="none"
+    stroke="currentColor"
+    stroke-width={strokeWidth}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    {figure.paths.map((path) => (
+      <path d={path} pathLength="1" />
+    ))}
+  </g>
+  <g fill="currentColor">
+    {figure.dots.map((point) => (
+      <circle cx={point.x} cy={point.y} r={dot} />
+    ))}
+  </g>
+</svg>
+
+<style>
+  .kolam {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .kolam--draw path {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: draw-kolam 2.4s var(--ease-out) 0.25s forwards;
+    }
+
+    .kolam--draw circle {
+      opacity: 0;
+      animation: show-dots 0.6s ease-out forwards;
+    }
+  }
+
+  @keyframes draw-kolam {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes show-dots {
+    to {
+      opacity: 1;
+    }
+  }
+</style>

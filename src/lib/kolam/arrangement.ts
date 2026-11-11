@@ -5,6 +5,12 @@
 export const ARRANGEMENTS = ['square-5', 'diamond-5', 'diamond-7'] as const;
 export type Arrangement = (typeof ARRANGEMENTS)[number];
 
+export const ARRANGEMENT_LABEL: Readonly<Record<Arrangement, string>> = {
+  'square-5': '5 × 5 square',
+  'diamond-5': '1-3-5-3-1 diamond',
+  'diamond-7': '1-3-5-7-5-3-1 diamond',
+};
+
 /** A dot position in whole grid steps from the centre dot. Rows grow downwards. */
 export interface GridDot {
   readonly col: number;

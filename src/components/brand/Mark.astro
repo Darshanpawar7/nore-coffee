@@ -1,0 +1,70 @@
+---
+import { frothBubbles, RIM } from '../../brand/marks';
+
+/**
+ * The froth ring. In colour: a steel rim, decoction, froth. In one colour: the rim and bubbles are
+ * cut out of a disc of currentColor, so it works on any ground.
+ */
+interface Props {
+  size?: number;
+  mono?: boolean;
+  class?: string;
+}
+
+const { size = 40, mono = false, class: className } = Astro.props;
+const bubbles = frothBubbles();
+---
+
+<svg
+  class:list={['mark', className]}
+  width={size}
+  height={size}
+  viewBox="0 0 64 64"
+  aria-hidden="true"
+  focusable="false"
+>
+  {mono ? (
+    <g fill="currentColor">
+      <circle
+        cx={RIM.cx}
+        cy={RIM.cy}
+        r={RIM.outer}
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+      />
+      <circle cx={RIM.cx} cy={RIM.cy} r={RIM.inner} />
+      <g fill="var(--paper, #f4eadb)">
+        {bubbles.map((bubble) => (
+          <circle cx={bubble.x} cy={bubble.y} r={bubble.r} />
+        ))}
+      </g>
+    </g>
+  ) : (
+    <g>
+      <circle cx={RIM.cx} cy={RIM.cy} r={RIM.outer} fill="#c9ccd1" />
+      <circle
+        cx={RIM.cx}
+        cy={RIM.cy}
+        r={RIM.outer - 1.4}
+        fill="none"
+        stroke="#e6e8eb"
+        stroke-width="1.2"
+      />
+      <circle cx={RIM.cx} cy={RIM.cy} r={RIM.inner} fill="#1f1410" />
+      <g fill="#f4eadb">
+        {bubbles.map((bubble) => (
+          <circle cx={bubble.x} cy={bubble.y} r={bubble.r} />
+        ))}
+      </g>
+      <circle
+        cx={RIM.cx}
+        cy={RIM.cy}
+        r={RIM.outer - 0.6}
+        fill="none"
+        stroke="#1f1410"
+        stroke-opacity="0.25"
+      />
+    </g>
+  )}
+</svg>

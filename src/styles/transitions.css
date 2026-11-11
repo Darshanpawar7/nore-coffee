@@ -1,0 +1,31 @@
+/* One view-transition name per bag, so a bag on a card can become the bag on its own page. A test
+   checks that every coffee in the catalogue has its line here. */
+[data-transition='meter-kaapi'] {
+  view-transition-name: pouch-meter-kaapi;
+}
+[data-transition='baba-budan'] {
+  view-transition-name: pouch-baba-budan;
+}
+[data-transition='monsooned-malabar'] {
+  view-transition-name: pouch-monsooned-malabar;
+}
+[data-transition='biligiri-natural'] {
+  view-transition-name: pouch-biligiri-natural;
+}
+[data-transition='araku-dawn'] {
+  view-transition-name: pouch-araku-dawn;
+}
+[data-transition='kodagu-peaberry'] {
+  view-transition-name: pouch-kodagu-peaberry;
+}
+[data-transition='nilgiri-mist'] {
+  view-transition-name: pouch-nilgiri-mist;
+}
+[data-transition='decoction-no-1'] {
+  view-transition-name: pouch-decoction-no-1;
+}
+
+::view-transition-group(*) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
