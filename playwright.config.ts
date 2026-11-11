@@ -7,7 +7,9 @@ const IS_CI = Boolean(process.env.CI);
 
 /**
  * End-to-end tests run against the production build, served under the same sub-path that
- * GitHub Pages uses. Locally they drive the installed Google Chrome; CI installs Chromium.
+ * GitHub Pages uses. Locally they drive the installed Google Chrome. CI runs Chromium in its new
+ * headless mode, which is the full browser: the stripped-down headless shell left the page
+ * unclickable after a cross-document view transition.
  */
 export default defineConfig({
   testDir: './e2e',
@@ -20,7 +22,7 @@ export default defineConfig({
   reporter: IS_CI ? [['github'], ['html', { open: 'never' }]] : [['list']],
   use: {
     baseURL: SITE_URL,
-    channel: IS_CI ? undefined : 'chrome',
+    channel: IS_CI ? 'chromium' : 'chrome',
     trace: 'on-first-retry',
   },
   projects: [
