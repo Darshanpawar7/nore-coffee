@@ -17,7 +17,8 @@ const current = (path: string) =>
 
 <header class="site-header">
   <div class="site-header__bar wrap">
-    <a class="site-header__home" href={href('/')} aria-label="Nore, home">
+    <a class="site-header__home" href={href('/')}>
+      <span class="visually-hidden">Home: </span>
       <Logo />
     </a>
     <nav class="site-nav" aria-label="Main">

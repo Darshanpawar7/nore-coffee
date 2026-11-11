@@ -44,14 +44,11 @@ export default function Cart() {
     return undefined;
   }, [count]);
 
-  const label = mounted ? `Cart, ${String(count)} ${count === 1 ? 'item' : 'items'}` : 'Cart';
-
   return (
     <>
       <a
         class="cart-button"
         href={href('/cart/')}
-        aria-label={label}
         aria-haspopup="dialog"
         onClick={(event) => {
           event.preventDefault();
@@ -63,7 +60,12 @@ export default function Cart() {
         </svg>
         <span class="cart-button__word">Cart</span>
         {mounted && count > 0 && (
-          <span class={bump ? 'cart-button__count is-bumped' : 'cart-button__count'}>{count}</span>
+          <>
+            <span class={bump ? 'cart-button__count is-bumped' : 'cart-button__count'}>
+              {count}
+            </span>
+            <span class="visually-hidden">{count === 1 ? ' item' : ' items'}</span>
+          </>
         )}
       </a>
       {/* Escape closes a modal dialog from the keyboard; the click handler adds the pointer's way out, a click on the backdrop. */}

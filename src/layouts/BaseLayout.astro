@@ -1,12 +1,11 @@
 ---
-import '@fontsource-variable/anek-latin/standard.css';
-import '@fontsource-variable/anek-kannada/standard.css';
-import '@fontsource-variable/newsreader/standard.css';
+import '../styles/fonts.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/islands.css';
 import '../styles/transitions.css';
-import anekLatin from '@fontsource-variable/anek-latin/files/anek-latin-latin-standard-normal.woff2?url';
+import anekLatin from '../fonts/anek-latin-latin.woff2?url';
+import newsreader from '../fonts/newsreader-latin.woff2?url';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import { href } from '../lib/paths';
@@ -44,6 +43,7 @@ const fullTitle =
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href={href('favicon.svg')} type="image/svg+xml" />
     <link rel="preload" href={anekLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={newsreader} as="font" type="font/woff2" crossorigin />
     <script is:inline>
       // A page transition the browser skips (a typed address, a reload) rejects its promises. Nothing
       // needs to hear about that, so they are caught here instead of reaching the console.
